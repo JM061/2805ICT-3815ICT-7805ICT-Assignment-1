@@ -1,9 +1,10 @@
 package screens;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class ConfigScreen extends JPanel{
-    public ConfigScreen(Main app){
+    public ConfigScreen(TetrisApp app){
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("Configuration");
         titleLabel.setFont(new Font("Dialog",Font.PLAIN, 32));
@@ -18,7 +19,9 @@ public class ConfigScreen extends JPanel{
 
             //code to create buttons
             JButton saveButton = new JButton("Save");
+            saveButton.addActionListener(e -> app.showScreen("Home"));
             JButton backButton = new JButton("Back");
+            backButton.addActionListener(e -> app.showScreen("Home"));
 
 
             //Adding buttons to buttonPanel
