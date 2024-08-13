@@ -11,7 +11,7 @@ GitHub Repo for Software Engineering Project.
 
 
 # TO-DO List
-- [ ] Make buttons functional (navigate between screens)
+- [x] Make buttons functional (navigate between screens)
 - [ ] Add settings to config screen (non functional)
 - [ ] Add gameplay functionality
   - [ ] Create canvas for game to be displayed on
