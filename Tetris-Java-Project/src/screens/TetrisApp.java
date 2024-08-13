@@ -24,11 +24,13 @@ public class TetrisApp {
             JPanel homeScreen = new HomeScreen(this);
             JPanel configScreen = new ConfigScreen(this);
             JPanel highScoreScreen = new HighScoreScreen(this);
+            JPanel gameDisplay = new GameDisplay(this);
 
             // Add screens to the main panel
             mainPanel.add(homeScreen, "Home");
             mainPanel.add(configScreen, "Config");
             mainPanel.add(highScoreScreen, "HighScores");
+            mainPanel.add(gameDisplay, "GameDisplay");
 
             // Show the home screen initially
             cardLayout.show(mainPanel, "Home");
