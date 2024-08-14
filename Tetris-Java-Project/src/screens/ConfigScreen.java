@@ -33,32 +33,25 @@ public class ConfigScreen extends JPanel{
 
             //Add Config Settings to Page
             JPanel ConfigOptions = new JPanel();
-            Box LeftBox = Box.createVerticalBox();
+            Box OptionsBox = Box.createVerticalBox();
 
             ConfigOptions.setBackground(Color.WHITE);
 
-            LeftBox.add(createConfigLabelWithSlider("Field Width", 0, 10, 5, labelFont));
+        OptionsBox.add(createConfigLabelWithSlider("Field Width: ", 0, 10, 5, labelFont));
+        OptionsBox.add(createConfigLabelWithSlider("Field Height: ", 0, 10, 5, labelFont));
+        OptionsBox.add(createConfigLabelWithSlider("Game Level: ", 0, 10, 5, labelFont));
+        OptionsBox.add(createConfigLabelWithCheckbox("Music (ON | OFF):",labelFont ));
+        OptionsBox.add(createConfigLabelWithCheckbox("Sound Effects (ON | OFF):",labelFont ));
+        OptionsBox.add(createConfigLabelWithCheckbox("AI Play (ON | OFF):",labelFont ));
+        OptionsBox.add(createConfigLabelWithCheckbox("Extend Mode (ON | OFF):",labelFont ));
 
-
-
-
-
-
-
-
-        ConfigOptions.add(LeftBox);
+        ConfigOptions.add(OptionsBox);
 
 
 
 
             add(ConfigOptions, BorderLayout.CENTER);
 
-    }
-    private JLabel createConfigLabel(String text, Font font) {
-        JLabel label = new JLabel(text);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        label.setFont(font);  // Set the font
-        return label;
     }
 
     // Define a font you want to use
