@@ -12,7 +12,9 @@ GitHub Repo for Software Engineering Project.
 
 # TO-DO List
 - [x] Make buttons functional (navigate between screens)
-- [ ] Add settings to config screen (non functional)
+- [x] Add settings to config screen (non functional)
+  - [ ] Style Config Options
+  - [ ] Add Functionality to options 
 - [ ] Add gameplay functionality
   - [ ] Create canvas for game to be displayed on
   - [ ] Create functions for generation of tetrominoes
