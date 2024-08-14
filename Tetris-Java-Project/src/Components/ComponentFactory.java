@@ -3,9 +3,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ComponentFactory {
-    public static JPanel createConfigLabelWithSlider(String text, int min, int max, int initial, Font font) {
+    public static JPanel createLabelWithSlider(String text, int min, int max, int initial) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
-        JLabel label = createConfigLabel(text, font);
+        JLabel label = createConfigLabel(text);
         JSlider slider = new JSlider(min, max, initial);
         slider.setMajorTickSpacing((max - min) / 5);
         slider.setPaintTicks(true);
@@ -15,19 +15,18 @@ public class ComponentFactory {
         return panel;
     }
 
-    public static JPanel createConfigLabelWithCheckbox(String text, Font font) {
+    public static JPanel createLabelWithCheckbox(String text) {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
-        JLabel label = createConfigLabel(text, font);
+        JLabel label = createConfigLabel(text);
         JCheckBox checkBox = new JCheckBox();
         panel.add(label, BorderLayout.WEST);
         panel.add(checkBox, BorderLayout.EAST);
         return panel;
     }
 
-    public static JLabel createConfigLabel(String text, Font font) {
+    public static JLabel createConfigLabel(String text) {
         JLabel label = new JLabel(text);
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        label.setFont(font);
         return label;
     }
 }

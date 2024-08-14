@@ -2,7 +2,7 @@ package screens;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
-import java.awt.event.ActionListener;
+
 import static Components.ComponentFactory.*;
 public class ConfigScreen extends JPanel{
     public ConfigScreen(TetrisApp app){
@@ -36,16 +36,17 @@ public class ConfigScreen extends JPanel{
             Box OptionsBox = Box.createVerticalBox();
 
             ConfigOptions.setBackground(Color.WHITE);
-
-        OptionsBox.add(createConfigLabelWithSlider("Field Width: ", 0, 10, 5, labelFont));
-        OptionsBox.add(createConfigLabelWithSlider("Field Height: ", 0, 10, 5, labelFont));
-        OptionsBox.add(createConfigLabelWithSlider("Game Level: ", 0, 10, 5, labelFont));
-        OptionsBox.add(createConfigLabelWithCheckbox("Music (ON | OFF):",labelFont ));
-        OptionsBox.add(createConfigLabelWithCheckbox("Sound Effects (ON | OFF):",labelFont ));
-        OptionsBox.add(createConfigLabelWithCheckbox("AI Play (ON | OFF):",labelFont ));
-        OptionsBox.add(createConfigLabelWithCheckbox("Extend Mode (ON | OFF):",labelFont ));
-
-        ConfigOptions.add(OptionsBox);
+            //Create Options for config page.
+            //Create labels with slider inputs
+            OptionsBox.add(createLabelWithSlider("Field Width: ", 0, 10, 5));
+            OptionsBox.add(createLabelWithSlider("Field Height: ", 0, 10, 5));
+            OptionsBox.add(createLabelWithSlider("Game Level: ", 0, 10, 5));
+            //Create labels with checkboxes
+            OptionsBox.add(createLabelWithCheckbox("Music (ON | OFF):" ));
+            OptionsBox.add(createLabelWithCheckbox("Sound Effects (ON | OFF):" ));
+            OptionsBox.add(createLabelWithCheckbox("AI Play (ON | OFF):" ));
+            OptionsBox.add(createLabelWithCheckbox("Extend Mode (ON | OFF):" ));
+            ConfigOptions.add(OptionsBox);
 
 
 
