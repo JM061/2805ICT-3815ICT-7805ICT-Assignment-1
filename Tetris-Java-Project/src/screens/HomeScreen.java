@@ -1,43 +1,41 @@
 package screens;
 import javax.swing.*;
 import java.awt.*;
-
+import static Components.ComponentFactory.*;
 
     public class HomeScreen extends JPanel {
+
         public HomeScreen(TetrisApp app) {
+
             setLayout(new BorderLayout());
             JLabel titleLabel = new JLabel("Tetris");
             titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));
             titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
             //Create Button Panel
             JPanel buttonPanel = new JPanel();
+            Box buttonBox = Box.createVerticalBox();
 
             //Create Buttons
-            JButton startButton = new JButton("Start");
-            startButton.setBackground(Color.WHITE);
-            startButton.addActionListener(e -> app.showScreen("GameDisplay"));
+            //Create Start Button
+            buttonBox.add(createNavigationbutton("Start", "GameDisplay", 250, 80, app));
+            buttonBox.add(Box.createVerticalStrut(15));
 
-            startButton.setPreferredSize(new Dimension(125, 50));
-
-            JButton configButton = new JButton("Configuration");
-            configButton.addActionListener(e -> app.showScreen("Config"));
-            configButton.setBackground(Color.WHITE);
-            configButton.setPreferredSize(new Dimension(125, 50));
+            //Create Config Button
+            buttonBox.add(createNavigationbutton("Configuration", "Config", 250, 80, app));
+            buttonBox.add(Box.createVerticalStrut(15));
 
 
-            JButton highScoreButton = new JButton("High Scores");
-            highScoreButton.addActionListener(e -> app.showScreen("HighScores"));
-            highScoreButton.setBackground(Color.WHITE);
-            highScoreButton.setPreferredSize(new Dimension(125, 50));
+            //Create High Score Button
+            buttonBox.add(createNavigationbutton("High Scores", "HighScores", 250, 80, app));
+            buttonBox.add(Box.createVerticalStrut(15));
+
+            //Create Exit Button
+
+            buttonBox.add(createNavigationbutton("Exit", "Exit", 250, 80, app));
 
 
             //Add Buttons to ButtonPanel
-            buttonPanel.add(highScoreButton);
-            buttonPanel.add(startButton);
-            buttonPanel.add(configButton);
-
-
-
+            buttonPanel.add(buttonBox);
 
             add(titleLabel, BorderLayout.NORTH);
             add(buttonPanel, BorderLayout.SOUTH);
