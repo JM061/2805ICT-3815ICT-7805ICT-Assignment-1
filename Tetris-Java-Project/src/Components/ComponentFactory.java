@@ -1,4 +1,7 @@
 package Components;
+import screens.HomeScreen;
+import screens.TetrisApp;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,4 +33,14 @@ public class ComponentFactory {
         label.setFont(font);
         return label;
     }
+
+    public static JButton createNavigationbutton(String buttonTitle, String navLocation, int width, int height, TetrisApp app){
+            JButton navButton = new JButton(buttonTitle);
+            navButton.addActionListener(e -> app.showScreen(navLocation));
+            navButton.setBackground(Color.WHITE);
+            navButton.setPreferredSize(new Dimension(width, height));
+            navButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            return navButton;
+    }
+
 }
