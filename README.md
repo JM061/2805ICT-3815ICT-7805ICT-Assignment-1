@@ -13,8 +13,8 @@ GitHub Repo for Software Engineering Project.
 # TO-DO List
 - [x] Make buttons functional (navigate between screens)
 - [x] Add settings to config screen (non functional)
-  - [ ] Style Config Options
-  - [ ] Add Functionality to options 
+  - [x] Style Config Options
+  - [ ] (MILESTONE 2) Add Functionality to options 
 - [ ] Add gameplay functionality
   - [ ] Create canvas for game to be displayed on
   - [ ] Create functions for generation of tetrominoes
@@ -23,6 +23,7 @@ GitHub Repo for Software Engineering Project.
   - [ ] Create functions to remove lines when completed
   - [ ] Create Scoring functions
   - [ ] Pause/Play functions
-- [ ] Save scores to file (Maybe JSON)
-- [ ] Access above file in high score screen and display values in a list 
+- [ ] (MILESTONE 2) Save scores to file (Maybe JSON)
+- [ ] Static High score screen (List of 10)
+- [ ] (MILESTONE 2) Access above file in high score screen and display values in a list 
   
