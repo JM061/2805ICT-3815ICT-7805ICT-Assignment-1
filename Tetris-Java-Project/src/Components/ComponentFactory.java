@@ -56,10 +56,15 @@ public class ComponentFactory {
     //requires buttonTitle navLocation(where the button will navigate to), width/height for size of button
     public static JButton createNavigationbutton(String buttonTitle, String navLocation, int width, int height, TetrisApp app){
             JButton navButton = new JButton(buttonTitle);
+
+            Dimension navButtonSize = new Dimension(width, height);
+            navButton.setPreferredSize(navButtonSize);
+            navButton.setMaximumSize(navButtonSize);
+            navButton.setMinimumSize(navButtonSize);
+
             navButton.addActionListener(e -> app.showScreen(navLocation));
+
             navButton.setBackground(Color.WHITE);
-            navButton.setPreferredSize(new Dimension(width, height));
-            navButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             return navButton;
     }
 
