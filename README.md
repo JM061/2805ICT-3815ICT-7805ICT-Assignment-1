@@ -24,6 +24,6 @@ GitHub Repo for Software Engineering Project.
   - [ ] Create Scoring functions
   - [ ] Pause/Play functions
 - [ ] (MILESTONE 2) Save scores to file (Maybe JSON)
-- [ ] Static High score screen (List of 10)
+- [x] Static High score screen (List of 10)
 - [ ] (MILESTONE 2) Access above file in high score screen and display values in a list 
   

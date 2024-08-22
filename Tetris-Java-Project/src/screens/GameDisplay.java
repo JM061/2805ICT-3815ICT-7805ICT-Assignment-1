@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameDisplay extends JPanel{
+    private TetrisApp app;
+
     public GameDisplay(TetrisApp app){
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("Play");
