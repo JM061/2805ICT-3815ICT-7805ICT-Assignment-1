@@ -4,18 +4,16 @@ import java.awt.*;
 
 
 public class TetrisApp {
-    private JFrame frame;
+    public JFrame applicationFrame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
     public TetrisApp() {
-
-
         SwingUtilities.invokeLater(() -> {
-            frame = new JFrame("Tetris Application");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(500, 800);
-            frame.setLocationRelativeTo(null);
+            applicationFrame = new JFrame("Tetris Application");
+            applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            applicationFrame.setSize(800, 800);
+            applicationFrame.setLocationRelativeTo(null);
 
             cardLayout = new CardLayout();
             mainPanel = new JPanel(cardLayout);
@@ -35,8 +33,8 @@ public class TetrisApp {
             // Show the home screen initially
             cardLayout.show(mainPanel, "Home");
 
-            frame.add(mainPanel);
-            frame.setVisible(true);
+            applicationFrame.add(mainPanel);
+            applicationFrame.setVisible(true);
         });
     }
 
