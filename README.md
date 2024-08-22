@@ -3,8 +3,8 @@ GitHub Repo for Software Engineering Project.
 
 ## Students Included in the Project
 
- - **S5259481** - Jacob Murphy 
- - **S5412170** – Jonas Rønningen 
+ - **S5259481** - Jacob Murphy (JM061)
+ - **S5412170** – Jonas Rønningen (h669791)
  - **S5352756** – Matilda Pamao 
  - **S5318466** – Sachin Bhanuka 
  - **** - Antu Saha
@@ -27,3 +27,6 @@ GitHub Repo for Software Engineering Project.
 - [x] Static High score screen (List of 10)
 - [ ] (MILESTONE 2) Access above file in high score screen and display values in a list 
   
+# Assignment 2 
+- Two player mode, differnet pieces instead of the same
+- Players can select to have either differnet or the same pieces when playing against each other

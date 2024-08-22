@@ -9,8 +9,7 @@ public class TetrisApp {
     private CardLayout cardLayout;
 
     public TetrisApp() {
-        //SplashScreen splash = new SplashScreen(2000);
-        //splash.showSplash();
+
 
         SwingUtilities.invokeLater(() -> {
             frame = new JFrame("Tetris Application");
@@ -46,6 +45,8 @@ public class TetrisApp {
     }
 
     public static void main(String[] args) {
+        SplashScreen splash = new SplashScreen(2000);
+        splash.showSplash();
         SwingUtilities.invokeLater(TetrisApp::new);
     }
 }
