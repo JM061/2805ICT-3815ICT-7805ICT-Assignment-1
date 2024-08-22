@@ -17,8 +17,7 @@ public class SplashScreen extends JWindow {
         int y = (screen.height - height) / 2;
         setBounds(x, y, width, height);
 // Build the splash screen
-        JLabel label = new JLabel(new
-                ImageIcon("./src/resources/splash.png"));
+        JLabel label = new JLabel(new ImageIcon("./src/resources/TetrisSplash.png"));
         JLabel copyrt = new JLabel("Copyright 2024, Group 12 Tetris Game",
                 JLabel.CENTER);
         copyrt.setFont(new Font("Sans-Serif", Font.BOLD, 12));
