@@ -3,8 +3,8 @@ GitHub Repo for Software Engineering Project.
 
 ## Students Included in the Project
 
- - **S5259481** - Jacob Murphy 
- - **S5412170** – Jonas Rønningen 
+ - **S5259481** - Jacob Murphy (JM061)
+ - **S5412170** – Jonas Rønningen (h669791)
  - **S5352756** – Matilda Pamao 
  - **S5318466** – Sachin Bhanuka 
  - **** - Antu Saha
