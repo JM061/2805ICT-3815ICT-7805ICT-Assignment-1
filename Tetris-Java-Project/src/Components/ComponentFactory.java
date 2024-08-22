@@ -1,5 +1,4 @@
 package Components;
-import screens.HomeScreen;
 import screens.TetrisApp;
 
 import javax.swing.*;
@@ -8,9 +7,17 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class ComponentFactory {
+
+    public static JLabel createLabel(String text) {
+    JLabel label = new JLabel(text);
+    label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    return label;
+}
+//used to create the sliders with labels on config page
+    //needs text for label, min / max values for slider and initial value
     public static JPanel createLabelWithSlider(String text, int min, int max, int initial) {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        JLabel label = createConfigLabel(text);
+        JPanel panel = new JPanel(new BorderLayout(50, 100));
+        JLabel label = createLabel(text);
         JSlider slider = new JSlider(min, max, initial);
         JLabel valueLabel = new JLabel(String.valueOf(initial)); // Label to display the slider's value
         slider.setMajorTickSpacing((max - min) / 5);
@@ -33,21 +40,20 @@ public class ComponentFactory {
         return panel;
     };
 
+    //creates checkbox with label for config page
+    //requires text for the title of label
     public static JPanel createLabelWithCheckbox(String text) {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
-        JLabel label = createConfigLabel(text);
+        JPanel panel = new JPanel(new BorderLayout(50, 100));
+        JLabel label = createLabel(text);
         JCheckBox checkBox = new JCheckBox();
         panel.add(label, BorderLayout.WEST);
         panel.add(checkBox, BorderLayout.EAST);
         return panel;
     }
 
-    public static JLabel createConfigLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        return label;
-    }
 
+    //used to create navigation buttons
+    //requires buttonTitle navLocation(where the button will navigate to), width/height for size of button
     public static JButton createNavigationbutton(String buttonTitle, String navLocation, int width, int height, TetrisApp app){
             JButton navButton = new JButton(buttonTitle);
             navButton.addActionListener(e -> app.showScreen(navLocation));
@@ -57,4 +63,13 @@ public class ComponentFactory {
             return navButton;
     }
 
+    //used to create the labels for the high score screen
+    public static JPanel createUserScoreLabel(String Username, int Score){
+        JPanel usersScorePanel = new JPanel(new BorderLayout(60, 20));
+        JLabel userLabel = createLabel(Username);
+        JLabel scoreLabel = createLabel(String.valueOf(Score));
+        usersScorePanel.add(userLabel, BorderLayout.WEST);
+        usersScorePanel.add(scoreLabel, BorderLayout.EAST);
+        return usersScorePanel;
+    }
 }
