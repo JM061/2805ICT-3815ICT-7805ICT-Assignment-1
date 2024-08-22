@@ -2,12 +2,33 @@ package screens;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import static Components.ComponentFactory.*;
 
+class UserScore {
+    String username;
+    int score;
+    UserScore(String username, int score) {
+        this.username = username;
+        this.score = score;
+    }
+}
 
 public class HighScoreScreen extends JPanel {
     private TetrisApp app;
     public HighScoreScreen (TetrisApp app) {
+        List<UserScore> userScores = new ArrayList<>();
+        userScores.add(new UserScore("Jacob", 100000));
+        userScores.add(new UserScore("Bob", 32302));
+        userScores.add(new UserScore("Alice", 23521));
+        userScores.add(new UserScore("John", 23455));
+        userScores.add(new UserScore("Mary", 2134));
+        userScores.add(new UserScore("Jane", 1234));
+
+
+
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("High Scores");
         titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));
@@ -19,8 +40,10 @@ public class HighScoreScreen extends JPanel {
         JPanel ScoreDisplayPanel = new JPanel();
         Box scoreDisplaysVertical = Box.createVerticalBox();
 
-        scoreDisplaysVertical.add(createUserScoreLabel("Jacob", 10000));
-        scoreDisplaysVertical.add(createUserScoreLabel("Bob", 3230));
+        for (UserScore userScore : userScores) {
+            scoreDisplaysVertical.add(createUserScoreLabel(userScore.username, userScore.score));
+        }
+
 
         //button creation
 
@@ -43,5 +66,8 @@ public class HighScoreScreen extends JPanel {
         add(buttonPanel, BorderLayout.PAGE_END);
 
     }
+
+
+
 
 }

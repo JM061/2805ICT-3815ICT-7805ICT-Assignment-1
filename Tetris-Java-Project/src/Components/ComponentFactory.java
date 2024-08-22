@@ -13,8 +13,10 @@ public class ComponentFactory {
     label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     return label;
 }
+//used to create the sliders with labels on config page
+    //needs text for label, min / max values for slider and initial value
     public static JPanel createLabelWithSlider(String text, int min, int max, int initial) {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        JPanel panel = new JPanel(new BorderLayout(50, 100));
         JLabel label = createLabel(text);
         JSlider slider = new JSlider(min, max, initial);
         JLabel valueLabel = new JLabel(String.valueOf(initial)); // Label to display the slider's value
@@ -38,8 +40,10 @@ public class ComponentFactory {
         return panel;
     };
 
+    //creates checkbox with label for config page
+    //requires text for the title of label
     public static JPanel createLabelWithCheckbox(String text) {
-        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        JPanel panel = new JPanel(new BorderLayout(50, 100));
         JLabel label = createLabel(text);
         JCheckBox checkBox = new JCheckBox();
         panel.add(label, BorderLayout.WEST);
@@ -48,7 +52,8 @@ public class ComponentFactory {
     }
 
 
-
+    //used to create navigation buttons
+    //requires buttonTitle navLocation(where the button will navigate to), width/height for size of button
     public static JButton createNavigationbutton(String buttonTitle, String navLocation, int width, int height, TetrisApp app){
             JButton navButton = new JButton(buttonTitle);
             navButton.addActionListener(e -> app.showScreen(navLocation));
@@ -58,9 +63,9 @@ public class ComponentFactory {
             return navButton;
     }
 
-
+    //used to create the labels for the high score screen
     public static JPanel createUserScoreLabel(String Username, int Score){
-        JPanel usersScorePanel = new JPanel(new BorderLayout(10, 10));
+        JPanel usersScorePanel = new JPanel(new BorderLayout(60, 20));
         JLabel userLabel = createLabel(Username);
         JLabel scoreLabel = createLabel(String.valueOf(Score));
         usersScorePanel.add(userLabel, BorderLayout.WEST);
