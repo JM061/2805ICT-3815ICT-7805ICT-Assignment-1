@@ -16,6 +16,7 @@ public class TetrisApp {
             frame = new JFrame("Tetris Application");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(500, 800);
+            frame.setLocationRelativeTo(null);
 
             cardLayout = new CardLayout();
             mainPanel = new JPanel(cardLayout);
