@@ -27,3 +27,6 @@ GitHub Repo for Software Engineering Project.
 - [x] Static High score screen (List of 10)
 - [ ] (MILESTONE 2) Access above file in high score screen and display values in a list 
   
+# Assignment 2 
+- Two player mode, differnet pieces instead of the same
+- Players can select to have either differnet or the same pieces when playing against each other
