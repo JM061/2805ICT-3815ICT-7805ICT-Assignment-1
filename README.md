@@ -16,7 +16,7 @@ GitHub Repo for Software Engineering Project.
   - [x] Style Config Options
   - [ ] (MILESTONE 2) Add Functionality to options 
 - [ ] Add gameplay functionality
-  - [ ] Create canvas for game to be displayed on
+  - [x] Create canvas for game to be displayed on
   - [ ] Create functions for generation of tetrominoes
   - [ ] Make tetrominoes functional (falling, left, right, rotate)
   - [ ] Collisions for blocks when stacking
