@@ -2,19 +2,22 @@ package Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameField extends JPanel {
     private int[][] grid;
     private int rows;
     private int cols;
+    private Tetromino currentTetromino;
     private final int GAME_STARTED = 1;
     private final int GAME_PAUSED = 2;
     private final int GAME_FINISHED = 3;
     public int GAME_STATUS = GAME_STARTED;
 
+    private Map<String, Action> actions;
 
     public GameField(int rows, int cols) {
         this.rows = rows;
@@ -25,51 +28,59 @@ public class GameField extends JPanel {
 
         setFocusable(true);
         requestFocusInWindow();
-        setupKeyListner();
+
+        setupKeyBindings();
 
 
+        //generates the first tetromino on page load
+        //random
+        TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
+        currentTetromino = new Tetromino(randomShape, cols / 2, 0);
     }
 
-    private void setupKeyListner(){
-        addKeyListener(new KeyListener() {
+    //key binding setup
+    private void setupKeyBindings() {
+        InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
 
-
-            //takes user key inputs
+        // Define actions for key events
+        actions = new HashMap<>();
+        actions.put("pause", new AbstractAction() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                int key = e.getKeyCode();
-                if (key == KeyEvent.VK_P) {
-                    togglePause();
-                }else if (GAME_STATUS == GAME_STARTED){
-                    switch (key){
-                        case KeyEvent.VK_LEFT:
-                            moveTetrominoLeft();//move tetromino Left
-                            break;
-                        case KeyEvent.VK_RIGHT://move tetromino Right
-                            moveTetrominoRight();
-                            break;
-                        case KeyEvent.VK_DOWN://move tetromino Right
-                            moveTetrominoDonw();
-                            break;
-                    }
-                }
-
-            }
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
+            public void actionPerformed(ActionEvent e) {
+                togglePause();
             }
         });
+        actions.put("moveLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveTetrominoLeft();
+            }
+        });
+        actions.put("moveRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveTetrominoRight();
+            }
+        });
+        actions.put("moveDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveTetrominoDown();
+            }
+        });
+
+        // Bind keys to actions
+        inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
+        inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
+        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+        inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
+
+        actionMap.put("pause", actions.get("pause"));
+        actionMap.put("moveLeft", actions.get("moveLeft"));
+        actionMap.put("moveRight", actions.get("moveRight"));
+        actionMap.put("moveDown", actions.get("moveDown"));
     }
-
-
-
 
     public int[][] getGrid() {
         return grid;
@@ -79,100 +90,53 @@ public class GameField extends JPanel {
         grid[row][col] = value;
     }
 
-    //basic function to move tetromino left
-    public void moveTetrominoLeft(){
+    // Function to move tetromino left
+    public void moveTetrominoLeft() {
         System.out.println("LEFT KEY PRESSED");
     }
-    //basic function to move tetromino right
-    public void moveTetrominoRight(){
+
+    // Function to move tetromino right
+    public void moveTetrominoRight() {
         System.out.println("RIGHT KEY PRESSED");
     }
 
-    //basic function to move tetromino down
-    public void moveTetrominoDonw(){
-        System.out.println("DONW KEY PRESSED");
+    // Function to move tetromino down
+    public void moveTetrominoDown() {
+        System.out.println("DOWN KEY PRESSED");
     }
 
-
-
-
-    // private int checkFullRows(){}
-    //
-    //
-    //
-    //
-
-    //private boolean checkGameOver(){}
-    //if currentShape position == x=0 y=0 a
-    //switch status to GAME_END
-    //
-
-
-    //change status to paused
+    // Change status to paused
     private void togglePause() {
         if (GAME_STATUS == GAME_STARTED) {
             GAME_STATUS = GAME_PAUSED;
-            System.out.println("GAME PAUSED" + GAME_STATUS);
+            System.out.println("GAME Status: " + GAME_STATUS);
         } else if (GAME_STATUS == GAME_PAUSED) {
             GAME_STATUS = GAME_STARTED;
-            System.out.println("GAME RUNNNING" + GAME_STATUS);
+            System.out.println("Game Status: " + GAME_STATUS);
         }
         repaint();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // function to change state to game over
-    //
-
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         generateCells(g);
 
-        if (GAME_STATUS == 1){
-            System.out.println("GAME STATUS:" + " " + GAME_STATUS);
+        if (GAME_STATUS == 1) {
+            System.out.println("GAME STATUS: " + GAME_STATUS);
         }
-        if (GAME_STATUS == GAME_PAUSED){
+        if (GAME_STATUS == GAME_PAUSED) {
             showPaused(g);
         }
 
-
-
-
-
+        if (currentTetromino != null) {
+            int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
+            currentTetromino.draw(g, cellSize);
+        }
     }
-    //displays pause text when game is paused
-    private void showPaused(Graphics g){
+
+    // Displays pause text when game is paused
+    private void showPaused(Graphics g) {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 16));
         String pauseMessage = "Game Paused";
@@ -181,17 +145,13 @@ public class GameField extends JPanel {
         int x = (getWidth() - fm.stringWidth(pauseMessage)) / 2;
         int y = (getHeight() / 2) + fm.getAscent();
         g.drawString(pauseMessage, x, y);
-        g.drawString(pauseMessage2, x-65, y + fm.getAscent());
+        g.drawString(pauseMessage2, x - 65, y + fm.getAscent());
     }
 
-
     private void generateCells(Graphics g) {
-        // Calculate cell size based on the component's current size
         int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
-
         for (int row = 0; row < grid.length; row++) {
             for (int col = 0; col < grid[row].length; col++) {
-                // Draw grid lines
                 g.setColor(Color.LIGHT_GRAY);
                 g.drawRect(col * cellSize, row * cellSize, cellSize, cellSize);
             }
