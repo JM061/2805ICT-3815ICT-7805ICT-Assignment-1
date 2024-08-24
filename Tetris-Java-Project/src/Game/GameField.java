@@ -34,6 +34,7 @@ public class GameField extends JPanel {
         addKeyListener(new KeyListener() {
 
 
+            //takes user key inputs
             @Override
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
@@ -42,12 +43,12 @@ public class GameField extends JPanel {
                 }else if (GAME_STATUS == GAME_STARTED){
                     switch (key){
                         case KeyEvent.VK_LEFT:
-                            moveTetrominoLeft();
+                            moveTetrominoLeft();//move tetromino Left
                             break;
-                        case KeyEvent.VK_RIGHT:
+                        case KeyEvent.VK_RIGHT://move tetromino Right
                             moveTetrominoRight();
                             break;
-                        case KeyEvent.VK_DOWN:
+                        case KeyEvent.VK_DOWN://move tetromino Right
                             moveTetrominoDonw();
                             break;
                     }
@@ -78,14 +79,16 @@ public class GameField extends JPanel {
         grid[row][col] = value;
     }
 
+    //basic function to move tetromino left
     public void moveTetrominoLeft(){
         System.out.println("LEFT KEY PRESSED");
     }
-
+    //basic function to move tetromino right
     public void moveTetrominoRight(){
         System.out.println("RIGHT KEY PRESSED");
     }
 
+    //basic function to move tetromino down
     public void moveTetrominoDonw(){
         System.out.println("DONW KEY PRESSED");
     }
@@ -103,9 +106,9 @@ public class GameField extends JPanel {
     //if currentShape position == x=0 y=0 a
     //switch status to GAME_END
     //
-    //
 
 
+    //change status to paused
     private void togglePause() {
         if (GAME_STATUS == GAME_STARTED) {
             GAME_STATUS = GAME_PAUSED;
@@ -123,7 +126,7 @@ public class GameField extends JPanel {
 
 
 
-    //change status to paused
+
 
 
 
@@ -168,6 +171,7 @@ public class GameField extends JPanel {
 
 
     }
+    //displays pause text when game is paused
     private void showPaused(Graphics g){
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 16));
