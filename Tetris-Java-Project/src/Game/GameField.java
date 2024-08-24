@@ -54,6 +54,7 @@ public class GameField extends JPanel {
                 }
 
             }
+
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -104,6 +105,7 @@ public class GameField extends JPanel {
     //
     //
 
+
     private void togglePause() {
         if (GAME_STATUS == GAME_STARTED) {
             GAME_STATUS = GAME_PAUSED;
@@ -112,7 +114,11 @@ public class GameField extends JPanel {
             GAME_STATUS = GAME_STARTED;
             System.out.println("GAME RUNNNING" + GAME_STATUS);
         }
+        repaint();
     }
+
+
+
 
 
 
@@ -148,11 +154,13 @@ public class GameField extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        generateCells(g);
 
         if (GAME_STATUS == 1){
-            generateCells(g);
             System.out.println("GAME STATUS:" + " " + GAME_STATUS);
+        }
+        if (GAME_STATUS == GAME_PAUSED){
+            showPaused(g);
         }
 
 
@@ -160,6 +168,18 @@ public class GameField extends JPanel {
 
 
     }
+    private void showPaused(Graphics g){
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        String pauseMessage = "Game Paused";
+        String pauseMessage2 = "Please press 'P' to keep playing";
+        FontMetrics fm = g.getFontMetrics();
+        int x = (getWidth() - fm.stringWidth(pauseMessage)) / 2;
+        int y = (getHeight() / 2) + fm.getAscent();
+        g.drawString(pauseMessage, x, y);
+        g.drawString(pauseMessage2, x-65, y + fm.getAscent());
+    }
+
 
     private void generateCells(Graphics g) {
         // Calculate cell size based on the component's current size
