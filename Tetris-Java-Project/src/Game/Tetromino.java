@@ -51,6 +51,9 @@ public class Tetromino {
     public ArrayList<Point> getBlocks() {
         return blocks;
     }
+    public void moveDown(){
+        this.y++;
+    }
 
     // draws the tetromino with predetermined cell size to match grid size
     public void draw(Graphics g, int cellSize) {

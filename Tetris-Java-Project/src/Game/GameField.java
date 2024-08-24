@@ -117,16 +117,13 @@ public class GameField extends JPanel {
     }
 
     public void moveTetrominoDown() {
-        if (currentTetromino != null) {
-            // Check if moving down is within bounds and not colliding with other blocks
-            if (canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY() + 1)) {
-                currentTetromino.setY(currentTetromino.getY() + 1);
-                repaint(); // Request to redraw the game field with the updated position
-            } else {
-                // Optionally handle the case when the tetromino cannot move down (e.g., place it in the grid, create a new tetromino)
-                placeTetromino();
-            }
+        if (canMoveDown(currentTetromino)) {
+            currentTetromino.moveDown();
+        } else {
+            // Place the tetromino and generate a new one
+            placeTetromino();
         }
+        repaint();
     }
 
     // Checks if the tetromino can move to the specified position
@@ -163,14 +160,34 @@ public class GameField extends JPanel {
 
     // Example method for placing tetrominoes
     private void placeTetromino() {
-        if (currentTetromino != null) {
-            placedTetrominos.add(currentTetromino);
-            // Clear or generate a new tetromino
-            TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
-            currentTetromino = new Tetromino(randomShape, cols / 2, 0);
-        }
+        placedTetrominos.add(currentTetromino);
+        //checkForFullRows(); // Optional: Check if any row is fully occupied
+        TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
+        currentTetromino = new Tetromino(randomShape, cols / 2, 0);
     }
 
+
+    private boolean canMoveDown(Tetromino tetromino) {
+        for (Point block : tetromino.getBlocks()) {
+            int newX = tetromino.getX() + block.x;
+            int newY = tetromino.getY() + block.y + 1; // Check the position below
+
+            // Check if it hits the bottom of the grid
+            if (newY >= rows) {
+                return false;
+            }
+
+            // Check if it collides with any placed tetromino
+            for (Tetromino placed : placedTetrominos) {
+                for (Point placedBlock : placed.getBlocks()) {
+                    if (newX == placed.getX() + placedBlock.x && newY == placed.getY() + placedBlock.y) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
 
     @Override
