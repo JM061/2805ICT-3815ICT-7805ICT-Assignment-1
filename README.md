@@ -16,13 +16,14 @@ GitHub Repo for Software Engineering Project.
   - [x] Style Config Options
   - [ ] (MILESTONE 2) Add Functionality to options 
 - [ ] Add gameplay functionality
-  - [ ] Create canvas for game to be displayed on
+  - [x] Create canvas for game to be displayed on
+  - [x] User input
   - [ ] Create functions for generation of tetrominoes
   - [ ] Make tetrominoes functional (falling, left, right, rotate)
   - [ ] Collisions for blocks when stacking
   - [ ] Create functions to remove lines when completed
   - [ ] Create Scoring functions
-  - [ ] Pause/Play functions
+  - [x] Pause/Play functions
 - [ ] (MILESTONE 2) Save scores to file (Maybe JSON)
 - [x] Static High score screen (List of 10)
 - [ ] (MILESTONE 2) Access above file in high score screen and display values in a list 
