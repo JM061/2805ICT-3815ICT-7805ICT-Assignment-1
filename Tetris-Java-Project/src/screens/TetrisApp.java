@@ -1,4 +1,5 @@
 package screens;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,6 +8,7 @@ public class TetrisApp {
     public JFrame applicationFrame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
+    private GameDisplay gameDisplay;
 
     public TetrisApp() {
         SwingUtilities.invokeLater(() -> {
@@ -22,7 +24,7 @@ public class TetrisApp {
             JPanel homeScreen = new HomeScreen(this);
             JPanel configScreen = new ConfigScreen(this);
             JPanel highScoreScreen = new HighScoreScreen(this);
-            JPanel gameDisplay = new GameDisplay(this);
+            gameDisplay = new GameDisplay(this);
 
             // Add screens to the main panel
             mainPanel.add(homeScreen, "Home");

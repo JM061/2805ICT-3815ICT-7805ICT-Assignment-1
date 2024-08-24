@@ -32,7 +32,7 @@ public class GameDisplay extends JPanel {
         GameField gameField = new GameField(20, 10); // Example: 20 rows and 10 columns
         GamePanel.add(gameField);
 
-       // GameBox.add(gameField);
+        // GameBox.add(gameField);
         //GameBox.setPreferredSize(new Dimension(200, 400));
         //GamePanel.setBackground(Color.WHITE);
 
@@ -46,10 +46,7 @@ public class GameDisplay extends JPanel {
 
         add(titleLabel, BorderLayout.PAGE_START);
         add(GamePanel, BorderLayout.CENTER);
-       //add(GameBox, BorderLayout.CENTER);
+        //add(GameBox, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.PAGE_END);
     }
 }
-
-
-
