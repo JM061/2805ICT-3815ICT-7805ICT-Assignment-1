@@ -15,6 +15,7 @@ public class TetrisApp {
             applicationFrame = new JFrame("Tetris Application");
             applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             applicationFrame.setSize(800, 800);
+          
             applicationFrame.setLocationRelativeTo(null);
 
             cardLayout = new CardLayout();
@@ -22,7 +23,7 @@ public class TetrisApp {
 
             // Create the different screens
             JPanel homeScreen = new HomeScreen(this);
-            JPanel configScreen = new ConfigScreen(this);
+            JPanel configScreen = new ConfigScreen( this);
             JPanel highScoreScreen = new HighScoreScreen(this);
             gameDisplay = new GameDisplay(this);
 
@@ -48,5 +49,8 @@ public class TetrisApp {
         SplashScreen splash = new SplashScreen(2000);
         splash.showSplash();
         SwingUtilities.invokeLater(TetrisApp::new);
+    }
+    public JFrame getFrame() {
+        return applicationFrame;
     }
 }
