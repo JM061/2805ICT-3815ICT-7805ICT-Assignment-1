@@ -11,6 +11,8 @@ public class Tetromino {
     private int x;
     private int y;
 
+
+    //initializes tetromino shape and x,y location
     public Tetromino(TetrominoShapeDefiner shape, int x, int y) {
         this.color = shape.getColor();
         this.blocks = new ArrayList<>();
@@ -25,29 +27,29 @@ public class Tetromino {
         this.x = x;
         this.y = y;
     }
-
-
-    //gets colour of tetromino when generating the shape
-    public Color getColor() {
-        return color;
-    }
-
-    //gets x coordinate of tetromino when generating
+    // Getter for x-coordinate
     public int getX() {
         return x;
     }
-    //gets y coordinate of tetromino when generating
+
+    // Setter for x-coordinate
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    // Getter for y-coordinate
     public int getY() {
         return y;
     }
 
-    //Sets x coordinate of tetromino
-    public void setX(int x) {
-        this.x = x;
-    }
-    //Sets y coordinate of tetromino
+    // Setter for y-coordinate
     public void setY(int y) {
         this.y = y;
+    }
+
+    // Getter for blocks
+    public ArrayList<Point> getBlocks() {
+        return blocks;
     }
 
     // draws the tetromino with predetermined cell size to match grid size

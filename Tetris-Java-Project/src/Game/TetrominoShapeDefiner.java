@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 public enum TetrominoShapeDefiner {
+    //used to create each tetromino shape
+    //Shape of tetromino (I,K,L,O,S,T,Z)
+    //Colour of each tetromino
+    //
     I(Color.CYAN, new int[][]{{1, 1, 1, 1}}),
     J(Color.BLUE, new int[][]{{0, 0, 1}, {1, 1, 1}}),
     L(Color.ORANGE, new int[][]{{1, 0, 0}, {1, 1, 1}}),
