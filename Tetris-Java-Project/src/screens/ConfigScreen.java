@@ -52,9 +52,6 @@ public class ConfigScreen extends JPanel{
             add(ConfigOptions, BorderLayout.CENTER);
 
     }
-
-    // Define a font you want to use
-    Font labelFont = new Font("Arial", Font.PLAIN, 14);
 }
 
 //need to add

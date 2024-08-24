@@ -1,20 +1,21 @@
 package screens;
+
 import javax.swing.*;
 import java.awt.*;
 
 
 public class TetrisApp {
-    private JFrame applicationFrame;
+    public JFrame applicationFrame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
+    private GameDisplay gameDisplay;
 
     public TetrisApp() {
-
-
         SwingUtilities.invokeLater(() -> {
             applicationFrame = new JFrame("Tetris Application");
             applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            applicationFrame.setSize(500, 800);
+            applicationFrame.setSize(800, 800);
+          
             applicationFrame.setLocationRelativeTo(null);
 
             cardLayout = new CardLayout();
@@ -24,7 +25,7 @@ public class TetrisApp {
             JPanel homeScreen = new HomeScreen(this);
             JPanel configScreen = new ConfigScreen( this);
             JPanel highScoreScreen = new HighScoreScreen(this);
-            JPanel gameDisplay = new GameDisplay(this);
+            gameDisplay = new GameDisplay(this);
 
             // Add screens to the main panel
             mainPanel.add(homeScreen, "Home");
