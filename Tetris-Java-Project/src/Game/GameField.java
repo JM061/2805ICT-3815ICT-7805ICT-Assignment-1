@@ -102,30 +102,36 @@ public class GameField extends JPanel {
 
     // Function to rotate the current tetromino
     public void rotateTetromino() {
-        if (currentTetromino != null) {
-            currentTetromino.rotate();  // Rotate the Tetromino
+        if (GAME_STATUS == GAME_STARTED) {
+            if (currentTetromino != null) {
+                currentTetromino.rotate();  // Rotate the Tetromino
 
-            // Check if the rotated Tetromino collides with the grid or placed blocks
-            if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
-                currentTetromino.rotateBack();  // Undo the rotation if it collides
+                // Check if the rotated Tetromino collides with the grid or placed blocks
+                if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
+                    currentTetromino.rotateBack();  // Undo the rotation if it collides
+                }
+
+                repaint();  // Redraw the game field with the rotated tetromino
             }
-
-            repaint();  // Redraw the game field with the rotated tetromino
         }
     }
 
     // Function to move tetromino left
     public void moveTetrominoLeft() {
-        if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() - 1, currentTetromino.getY())) {
-            currentTetromino.setX(currentTetromino.getX() - 1);
-            repaint(); // Request to redraw the game field with the updated position
+        if (GAME_STATUS == GAME_STARTED) {
+            if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() - 1, currentTetromino.getY())) {
+                currentTetromino.setX(currentTetromino.getX() - 1);
+                repaint(); // Request to redraw the game field with the updated position
+            }
         }
     }
 
     public void moveTetrominoRight() {
-        if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
-            currentTetromino.setX(currentTetromino.getX() + 1);
-            repaint(); // Request to redraw the game field with the updated position
+        if (GAME_STATUS == GAME_STARTED) {
+            if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
+                currentTetromino.setX(currentTetromino.getX() + 1);
+                repaint(); // Request to redraw the game field with the updated position
+            }
         }
     }
 
