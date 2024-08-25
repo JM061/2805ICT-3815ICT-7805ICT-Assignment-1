@@ -79,17 +79,39 @@ public class GameField extends JPanel {
                 moveTetrominoDown();
             }
         });
+        actions.put("rotate", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rotateTetromino();
+            }
+        });
 
         // Bind keys to actions
         inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
         inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
         inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
         inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
+        inputMap.put(KeyStroke.getKeyStroke("UP"), "rotate");
 
         actionMap.put("pause", actions.get("pause"));
         actionMap.put("moveLeft", actions.get("moveLeft"));
         actionMap.put("moveRight", actions.get("moveRight"));
         actionMap.put("moveDown", actions.get("moveDown"));
+        actionMap.put("rotate", actions.get("rotate"));
+    }
+
+    // Function to rotate the current tetromino
+    public void rotateTetromino() {
+        if (currentTetromino != null) {
+            currentTetromino.rotate();  // Rotate the Tetromino
+
+            // Check if the rotated Tetromino collides with the grid or placed blocks
+            if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
+                currentTetromino.rotateBack();  // Undo the rotation if it collides
+            }
+
+            repaint();  // Redraw the game field with the rotated tetromino
+        }
     }
 
     // Function to move tetromino left
@@ -145,11 +167,84 @@ public class GameField extends JPanel {
         repaint();
     }
 
-    // Example method for placing tetrominos
     private void placeTetromino() {
+        for (Point block : currentTetromino.getBlocks()) {
+            int gridX = currentTetromino.getX() + block.x;
+            int gridY = currentTetromino.getY() + block.y;
+
+            // Mark the grid cell as occupied
+            grid[gridY][gridX] = 1;
+        }
+
+        // Clear any full rows after placing the Tetromino
+        clearFullRows();
+
         placedTetrominos.add(currentTetromino);
+        spawnTetromino();
+
+        repaint();  // Repaint the game field after updating the grid
+    }
+
+
+    private void clearFullRows() {
+        for (int row = 0; row < rows; row++) {
+            boolean isRowFull = true;
+            // Check if the row is full
+            for (int col = 0; col < cols; col++) {
+                if (grid[row][col] == 0) {
+                    isRowFull = false;
+                    break;
+                }
+            }
+
+            // If the row is full, clear it and shift all rows above down
+            if (isRowFull) {
+                clearRow(row);
+                shiftRowsDown(row);
+                row--;  // Check the same row again after shifting, as it now contains the row above
+            }
+        }
+    }
+
+
+    // Method to clear a specific row
+    private void clearRow(int row) {
+        for (int col = 0; col < cols; col++) {
+            grid[row][col] = 0;  // Clear the row by setting all cells to 0
+        }
+    }
+
+    private void shiftRowsDown(int clearedRow) {
+        // Shift all rows above the cleared row down by one
+        for (int row = clearedRow; row > 0; row--) {
+            for (int col = 0; col < cols; col++) {
+                grid[row][col] = grid[row - 1][col];  // Move the above row down
+            }
+        }
+
+        // Clear the top row after shifting to avoid leftover blocks
+        for (int col = 0; col < cols; col++) {
+            grid[0][col] = 0;
+        }
+    }
+
+
+    // Method to spawn a new Tetromino
+    private void spawnTetromino() {
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
         currentTetromino = new Tetromino(randomShape, cols / 2, 0);
+
+        // Check if the new Tetromino can be placed at the top
+        if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
+            gameOver();  // End the game if the new Tetromino cannot be placed
+        }
+    }
+
+    private void gameOver() {
+        GAME_STATUS = GAME_FINISHED;
+        timer.stop();  // Stop the game loop
+        JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        // Additional game-over logic, such as restarting or returning to the main menu, can go here
     }
 
     private boolean canMoveDown(Tetromino tetromino) {
@@ -162,13 +257,9 @@ public class GameField extends JPanel {
                 return false;
             }
 
-            // Check if it collides with any placed tetromino
-            for (Tetromino placed : placedTetrominos) {
-                for (Point placedBlock : placed.getBlocks()) {
-                    if (newX == placed.getX() + placedBlock.x && newY == placed.getY() + placedBlock.y) {
-                        return false;
-                    }
-                }
+            // Check if it collides with any placed Tetromino
+            if (grid[newY][newX] != 0) {
+                return false;
             }
         }
         return true;
@@ -179,22 +270,27 @@ public class GameField extends JPanel {
         super.paintComponent(g);
         generateCells(g);
 
-        if (GAME_STATUS == GAME_PAUSED) {
-            showPaused(g);
-        }
-
-        // Draw placed tetrominos
-        for (Tetromino tetromino : placedTetrominos) {
-            int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
-            tetromino.draw(g, cellSize);
+        // Draw placed blocks based on the grid state
+        int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (grid[row][col] != 0) {  // If the cell is occupied, draw a block
+                    g.setColor(Color.BLUE);  // You can set this color based on your block color
+                    g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                }
+            }
         }
 
         // Draw the current tetromino
         if (currentTetromino != null) {
-            int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
             currentTetromino.draw(g, cellSize);
         }
+
+        if (GAME_STATUS == GAME_PAUSED) {
+            showPaused(g);
+        }
     }
+
 
     // Displays pause text when game is paused
     private void showPaused(Graphics g) {
