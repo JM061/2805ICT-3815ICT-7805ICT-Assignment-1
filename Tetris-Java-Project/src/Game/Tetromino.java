@@ -6,8 +6,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 public class Tetromino {
-    private Color color;
-    private ArrayList<Point> blocks;
+    private final Color color;
+    private final ArrayList<Point> blocks;
     private int[][] shape;
     private int x;
     private int y;

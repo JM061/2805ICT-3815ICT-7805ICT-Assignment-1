@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameField extends JPanel {
-    private Color[][] grid;
-
+    private final Color[][] grid;
     private int rows;
     private int cols;
     private Tetromino currentTetromino;
@@ -104,36 +103,30 @@ public class GameField extends JPanel {
 
     // Function to rotate the current tetromino
     public void rotateTetromino() {
-        if (GAME_STATUS == GAME_STARTED) {
-            if (currentTetromino != null) {
-                currentTetromino.rotate();  // Rotate the Tetromino
+        if (currentTetromino != null) {
+            currentTetromino.rotate();  // Rotate the Tetromino
 
-                // Check if the rotated Tetromino collides with the grid or placed blocks
-                if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
-                    currentTetromino.rotateBack();  // Undo the rotation if it collides
-                }
-
-                repaint();  // Redraw the game field with the rotated tetromino
+            // Check if the rotated Tetromino collides with the grid or placed blocks
+            if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
+                currentTetromino.rotateBack();  // Undo the rotation if it collides
             }
+
+            repaint();  // Redraw the game field with the rotated tetromino
         }
     }
 
     // Function to move tetromino left
     public void moveTetrominoLeft() {
-        if (GAME_STATUS == GAME_STARTED) {
-            if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() - 1, currentTetromino.getY())) {
-                currentTetromino.setX(currentTetromino.getX() - 1);
-                repaint(); // Request to redraw the game field with the updated position
-            }
+        if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() - 1, currentTetromino.getY())) {
+            currentTetromino.setX(currentTetromino.getX() - 1);
+            repaint(); // Request to redraw the game field with the updated position
         }
     }
 
     public void moveTetrominoRight() {
-        if (GAME_STATUS == GAME_STARTED) {
-            if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
-                currentTetromino.setX(currentTetromino.getX() + 1);
-                repaint(); // Request to redraw the game field with the updated position
-            }
+        if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
+            currentTetromino.setX(currentTetromino.getX() + 1);
+            repaint(); // Request to redraw the game field with the updated position
         }
     }
 
@@ -283,30 +276,18 @@ public class GameField extends JPanel {
         generateCells(g);
 
         // Draw placed blocks based on the grid state
-// Draw placed blocks based on the grid state
-int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
-for (int row = 0; row < rows; row++) {
-    for (int col = 0; col < cols; col++) {
-        if (grid[row][col] != null) {  // If the cell is occupied, draw a block with the stored color
-            g.setColor(grid[row][col]);
-            g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-        }
-    }
-}
-
-// Draw placed Tetrominos
-if (placedTetrominos != null) {
-    for (Tetromino tetromino : placedTetrominos) {
-        tetromino.draw(g, cellSize);  // Draw the placed Tetrominos
-    }
-}
-
+        int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (grid[row][col] != null) {  // If the cell is occupied, draw a block with the stored color
+                    g.setColor(grid[row][col]);
+                    g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                }
             }
         }
 
         // Draw the current tetromino
         if (currentTetromino != null) {
-            int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
             currentTetromino.draw(g, cellSize);
         }
 
