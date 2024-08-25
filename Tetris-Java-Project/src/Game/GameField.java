@@ -4,12 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-
-import java.util.ArrayList;
-
 
 public class GameField extends JPanel {
     private int[][] grid;
@@ -23,6 +20,8 @@ public class GameField extends JPanel {
     public int GAME_STATUS = GAME_STARTED;
 
     private Map<String, Action> actions;
+    private Timer timer;
+    private static final int DROP_DELAY = 500; // delay in milliseconds
 
     public GameField(int rows, int cols) {
         this.rows = rows;
@@ -32,18 +31,24 @@ public class GameField extends JPanel {
         this.setBackground(Color.WHITE);
         this.placedTetrominos = new ArrayList<>(); // Ensure it's initialized here
         setFocusable(true);
-        requestFocusInWindow();
+        requestFocusInWindow();//sets focus on window to allow keyboard inputs
+        setupKeyBindings();//function to setup keybindings
 
-        setupKeyBindings();
-
-
-        //generates the first tetromino on page load
-        //random
+        // Generates the first tetromino on page load
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
         currentTetromino = new Tetromino(randomShape, cols / 2, 0);
+
+        // Initialize and start the timer for automatic tetromino movement
+        timer = new Timer(DROP_DELAY, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveTetrominoDown();
+            }
+        });
+        timer.start(); // Start the timer when the game field is created
     }
 
-    //key binding setup
+    // Key binding setup
     private void setupKeyBindings() {
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
@@ -87,59 +92,41 @@ public class GameField extends JPanel {
         actionMap.put("moveDown", actions.get("moveDown"));
     }
 
-    public int[][] getGrid() {
-        return grid;
-    }
-
-    public void setBlock(int row, int col, int value) {
-        grid[row][col] = value;
-    }
-
     // Function to move tetromino left
     public void moveTetrominoLeft() {
-        if (currentTetromino != null) {
-            // Check if moving left is within bounds and not colliding with other blocks
-            if (canMoveTo(currentTetromino, currentTetromino.getX() - 1, currentTetromino.getY())) {
-                currentTetromino.setX(currentTetromino.getX() - 1);
-                repaint(); // Request to redraw the game field with the updated position
-            }
+        if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() - 1, currentTetromino.getY())) {
+            currentTetromino.setX(currentTetromino.getX() - 1);
+            repaint(); // Request to redraw the game field with the updated position
         }
     }
 
     public void moveTetrominoRight() {
-        if (currentTetromino != null) {
-            // Check if moving right is within bounds and not colliding with other blocks
-            if (canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
-                currentTetromino.setX(currentTetromino.getX() + 1);
-                repaint(); // Request to redraw the game field with the updated position
-            }
+        if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
+            currentTetromino.setX(currentTetromino.getX() + 1);
+            repaint(); // Request to redraw the game field with the updated position
         }
     }
 
     public void moveTetrominoDown() {
-        if (canMoveDown(currentTetromino)) {
-            currentTetromino.moveDown();
-        } else {
-            // Place the tetromino and generate a new one
-            placeTetromino();
+        if (GAME_STATUS == GAME_STARTED) {
+            if (canMoveDown(currentTetromino)) {
+                currentTetromino.moveDown();
+            } else {
+                // Place the tetromino and generate a new one
+                placeTetromino();
+            }
+            repaint();
         }
-        repaint();
     }
 
     // Checks if the tetromino can move to the specified position
     private boolean canMoveTo(Tetromino tetromino, int newX, int newY) {
-        // logic to check if the new position is within bounds and does not collide with existing blocks
         for (Point block : tetromino.getBlocks()) {
             int newCol = block.x + newX;
             int newRow = block.y + newY;
 
             // Check if the new position is within the grid bounds
-            if (newCol < 0 || newCol >= cols || newRow >= rows) {
-                return false;
-            }
-
-            // Check if the new position collides with existing blocks
-            if (grid[newRow][newCol] != 0) {
+            if (newCol < 0 || newCol >= cols || newRow >= rows || grid[newRow][newCol] != 0) {
                 return false;
             }
         }
@@ -150,27 +137,25 @@ public class GameField extends JPanel {
     private void togglePause() {
         if (GAME_STATUS == GAME_STARTED) {
             GAME_STATUS = GAME_PAUSED;
-            System.out.println("GAME Status: " + GAME_STATUS);
+            timer.stop(); // Stop the timer when the game is paused
         } else if (GAME_STATUS == GAME_PAUSED) {
             GAME_STATUS = GAME_STARTED;
-            System.out.println("Game Status: " + GAME_STATUS);
+            timer.start(); // Restart the timer when the game resumes
         }
         repaint();
     }
 
-    // Example method for placing tetrominoes
+    // Example method for placing tetrominos
     private void placeTetromino() {
         placedTetrominos.add(currentTetromino);
-        //checkForFullRows(); // Optional: Check if any row is fully occupied
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
         currentTetromino = new Tetromino(randomShape, cols / 2, 0);
     }
 
-
     private boolean canMoveDown(Tetromino tetromino) {
         for (Point block : tetromino.getBlocks()) {
             int newX = tetromino.getX() + block.x;
-            int newY = tetromino.getY() + block.y + 1; // Check the position below
+            int newY = tetromino.getY() + block.y + 1;
 
             // Check if it hits the bottom of the grid
             if (newY >= rows) {
@@ -189,25 +174,19 @@ public class GameField extends JPanel {
         return true;
     }
 
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         generateCells(g);
 
-        if (GAME_STATUS == 1) {
-            System.out.println("GAME STATUS: " + GAME_STATUS);
-        }
         if (GAME_STATUS == GAME_PAUSED) {
             showPaused(g);
         }
 
-        //draw placed tetromino
-        if (placedTetrominos != null) {
-            for (Tetromino tetromino : placedTetrominos) {
-                int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
-                tetromino.draw(g, cellSize);
-            }
+        // Draw placed tetrominos
+        for (Tetromino tetromino : placedTetrominos) {
+            int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
+            tetromino.draw(g, cellSize);
         }
 
         // Draw the current tetromino
