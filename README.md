@@ -19,7 +19,7 @@ GitHub Repo for Software Engineering Project.
   - [x] Create canvas for game to be displayed on
   - [x] User input
   - [x] Create functions for generation of tetrominoes
-  - [ ] Make tetrominoes functional (falling, left, right, rotate)
+  - [x] Make tetrominoes functional (falling, left, right, rotate)
   - [ ] Collisions for blocks when stacking
   - [ ] Create functions to remove lines when completed
   - [ ] Create Scoring functions
