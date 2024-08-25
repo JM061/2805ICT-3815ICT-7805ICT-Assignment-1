@@ -20,7 +20,8 @@ GitHub Repo for Software Engineering Project.
   - [x] User input
   - [x] Create functions for generation of tetrominoes
   - [x] Make tetrominoes functional (falling, left, right, rotate)
-  - [ ] Collisions for blocks when stacking
+  - [x] Collisions for blocks when stacking
+  - [ ] Create a function which restarts the game when it's game over
   - [ ] Create functions to remove lines when completed
   - [ ] Create Scoring functions
   - [x] Pause/Play functions
