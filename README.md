@@ -22,7 +22,7 @@ GitHub Repo for Software Engineering Project.
   - [x] Make tetrominoes functional (falling, left, right, rotate)
   - [x] Collisions for blocks when stacking
   - [ ] Create a function which restarts the game when it's game over
-  - [ ] Create functions to remove lines when completed
+  - [x] Create functions to remove lines when completed
   - [ ] Create Scoring functions
   - [x] Pause/Play functions
 - [ ] (MILESTONE 2) Save scores to file (Maybe JSON)
