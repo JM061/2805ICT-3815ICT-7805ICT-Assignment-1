@@ -42,12 +42,12 @@ public class TetrisApp {
     }
 
     public void showScreen(String screenName) {
-        cardLayout.show(mainPanel, screenName);
+       cardLayout.show(mainPanel, screenName);
     }
 
     public static void main(String[] args) {
-        SplashScreen splash = new SplashScreen(2000);
-        splash.showSplash();
+       // SplashScreen splash = new SplashScreen(2000);
+        //splash.showSplash();
         SwingUtilities.invokeLater(TetrisApp::new);
     }
     public JFrame getFrame() {

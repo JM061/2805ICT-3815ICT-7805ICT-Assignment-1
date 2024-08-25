@@ -46,7 +46,6 @@ public class GameDisplay extends JPanel {
 
         add(titleLabel, BorderLayout.PAGE_START);
         add(GamePanel, BorderLayout.CENTER);
-        //add(GameBox, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.PAGE_END);
     }
 }
