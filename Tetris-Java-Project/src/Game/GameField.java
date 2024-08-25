@@ -178,7 +178,6 @@ public class GameField extends JPanel {
 
         // Clear any full rows after placing the Tetromino
         clearFullRows();
-
         placedTetrominos.add(currentTetromino);
         spawnTetromino();
 
@@ -271,18 +270,17 @@ public class GameField extends JPanel {
         generateCells(g);
 
         // Draw placed blocks based on the grid state
-        int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                if (grid[row][col] != 0) {  // If the cell is occupied, draw a block
-                    g.setColor(Color.BLUE);  // You can set this color based on your block color
-                    g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-                }
+        //draw placed tetromino
+        if (placedTetrominos != null) {
+            for (Tetromino tetromino : placedTetrominos) {
+                int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
+                tetromino.draw(g, cellSize);
             }
         }
 
         // Draw the current tetromino
         if (currentTetromino != null) {
+            int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
             currentTetromino.draw(g, cellSize);
         }
 
