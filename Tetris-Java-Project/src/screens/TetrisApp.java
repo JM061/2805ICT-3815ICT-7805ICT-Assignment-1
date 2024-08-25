@@ -46,8 +46,8 @@ public class TetrisApp {
     }
 
     public static void main(String[] args) {
-       // SplashScreen splash = new SplashScreen(2000);
-        //splash.showSplash();
+        SplashScreen splash = new SplashScreen(2000);
+        splash.showSplash();
         SwingUtilities.invokeLater(TetrisApp::new);
     }
     public JFrame getFrame() {
