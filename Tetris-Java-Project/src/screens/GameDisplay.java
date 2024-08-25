@@ -1,6 +1,9 @@
 package screens;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import Game.*;
 
 public class GameDisplay extends JPanel {
@@ -26,6 +29,20 @@ public class GameDisplay extends JPanel {
         backButton.setBackground(Color.WHITE);
         backButton.setPreferredSize(new Dimension(100, 50));
         backButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int response = JOptionPane.showConfirmDialog(app.getFrame(),
+                        "Are you sure you want to go back?",
+                        "Leave Game?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+
+                if (response == JOptionPane.YES_OPTION) {
+                    app.showScreen("Home"); //If user selects yes, they will be taken back to the home screen
+                }
+            }
+        });
 
 
 
