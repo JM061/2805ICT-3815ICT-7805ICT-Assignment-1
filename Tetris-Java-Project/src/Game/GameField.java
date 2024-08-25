@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameField extends JPanel {
-    private int[][] grid;
+    private Color[][] grid;
+
     private int rows;
     private int cols;
     private Tetromino currentTetromino;
@@ -26,7 +27,7 @@ public class GameField extends JPanel {
     public GameField(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        this.grid = new int[rows][cols];
+        this.grid = new Color[rows][cols];  // Store colors instead of integers
         this.setPreferredSize(new Dimension(251, 501)); // Set preferred size
         this.setBackground(Color.WHITE);
         this.placedTetrominos = new ArrayList<>(); // Ensure it's initialized here
@@ -47,6 +48,7 @@ public class GameField extends JPanel {
         });
         timer.start(); // Start the timer when the game field is created
     }
+
 
     // Key binding setup
     private void setupKeyBindings() {
@@ -141,19 +143,20 @@ public class GameField extends JPanel {
         }
     }
 
-    // Checks if the tetromino can move to the specified position
     private boolean canMoveTo(Tetromino tetromino, int newX, int newY) {
         for (Point block : tetromino.getBlocks()) {
             int newCol = block.x + newX;
             int newRow = block.y + newY;
 
             // Check if the new position is within the grid bounds
-            if (newCol < 0 || newCol >= cols || newRow >= rows || grid[newRow][newCol] != 0) {
+            if (newCol < 0 || newCol >= cols || newRow < 0 || newRow >= rows || grid[newRow][newCol] != null) {
                 return false;
             }
         }
         return true;
     }
+
+
 
     // Change status to paused
     private void togglePause() {
@@ -168,17 +171,17 @@ public class GameField extends JPanel {
     }
 
     private void placeTetromino() {
+        Color tetrominoColor = currentTetromino.getColor();  // Get the color of the current Tetromino
         for (Point block : currentTetromino.getBlocks()) {
             int gridX = currentTetromino.getX() + block.x;
             int gridY = currentTetromino.getY() + block.y;
 
-            // Mark the grid cell as occupied
-            grid[gridY][gridX] = 1;
+            // Store the color of the block in the grid
+            grid[gridY][gridX] = tetrominoColor;
         }
 
         // Clear any full rows after placing the Tetromino
         clearFullRows();
-
         placedTetrominos.add(currentTetromino);
         spawnTetromino();
 
@@ -191,7 +194,7 @@ public class GameField extends JPanel {
             boolean isRowFull = true;
             // Check if the row is full
             for (int col = 0; col < cols; col++) {
-                if (grid[row][col] == 0) {
+                if (grid[row][col] == null) {
                     isRowFull = false;
                     break;
                 }
@@ -207,12 +210,12 @@ public class GameField extends JPanel {
     }
 
 
-    // Method to clear a specific row
     private void clearRow(int row) {
         for (int col = 0; col < cols; col++) {
-            grid[row][col] = 0;  // Clear the row by setting all cells to 0
+            grid[row][col] = null;  // Clear the row by setting all cells to null
         }
     }
+
 
     private void shiftRowsDown(int clearedRow) {
         // Shift all rows above the cleared row down by one
@@ -224,9 +227,11 @@ public class GameField extends JPanel {
 
         // Clear the top row after shifting to avoid leftover blocks
         for (int col = 0; col < cols; col++) {
-            grid[0][col] = 0;
+            grid[0][col] = null;
         }
     }
+
+
 
 
     // Method to spawn a new Tetromino
@@ -258,12 +263,13 @@ public class GameField extends JPanel {
             }
 
             // Check if it collides with any placed Tetromino
-            if (grid[newY][newX] != 0) {
+            if (grid[newY][newX] != null) {
                 return false;
             }
         }
         return true;
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -274,8 +280,8 @@ public class GameField extends JPanel {
         int cellSize = Math.min(getWidth() / cols, getHeight() / rows);
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
-                if (grid[row][col] != 0) {  // If the cell is occupied, draw a block
-                    g.setColor(Color.BLUE);  // You can set this color based on your block color
+                if (grid[row][col] != null) {  // If the cell is occupied, draw a block with the stored color
+                    g.setColor(grid[row][col]);
                     g.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
                 }
             }
@@ -290,6 +296,7 @@ public class GameField extends JPanel {
             showPaused(g);
         }
     }
+
 
 
     // Displays pause text when game is paused

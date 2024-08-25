@@ -13,6 +13,9 @@ public class Tetromino {
     private int y;
 
 
+    public Color getColor(){
+        return color;
+    }
     //initializes tetromino shape and x,y location
     public Tetromino(TetrominoShapeDefiner shape, int x, int y) {
         this.color = shape.getColor();
