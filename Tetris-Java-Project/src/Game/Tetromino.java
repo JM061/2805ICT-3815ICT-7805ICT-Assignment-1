@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Tetromino {
     private Color color;
     private ArrayList<Point> blocks;
+    private int[][] shape;
     private int x;
     private int y;
 
@@ -15,18 +16,49 @@ public class Tetromino {
     //initializes tetromino shape and x,y location
     public Tetromino(TetrominoShapeDefiner shape, int x, int y) {
         this.color = shape.getColor();
+        this.shape = shape.getShape();
         this.blocks = new ArrayList<>();
-        int[][] shapeArray = shape.getShape();
-        for (int row = 0; row < shapeArray.length; row++) {
-            for (int col = 0; col < shapeArray[row].length; col++) {
-                if (shapeArray[row][col] == 1) {
+        this.x = x;
+        this.y = y;
+
+        updateBlockFromShape();
+    }
+
+
+
+    public void rotate() {
+        int[][] rotatedShape = new int[shape[0].length][shape.length];
+
+        for (int row = 0; row < shape.length; row++) {
+            for (int col = 0; col < shape[row].length; col++) {
+                rotatedShape[col][shape.length - 1 - row] = shape[row][col];
+            }
+        }
+
+        shape = rotatedShape;
+        updateBlockFromShape();
+    }
+
+    public void updateBlockFromShape(){
+        blocks.clear();
+        for(int row = 0; row < shape.length; row++) {
+            for(int col = 0; col < shape[row].length; col++) {
+                if (shape[row][col] == 1) {
                     blocks.add(new Point(col, row));
+
                 }
             }
         }
-        this.x = x;
-        this.y = y;
     }
+    // Rotate the Tetromino 90 degrees counterclockwise (undo rotation)
+    public void rotateBack() {
+        // Rotate three more times to undo a 90-degree clockwise rotation
+        rotate();
+        rotate();
+        rotate();
+    }
+
+
     // Getter for x-coordinate
     public int getX() {
         return x;
