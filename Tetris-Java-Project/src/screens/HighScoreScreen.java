@@ -21,11 +21,16 @@ public class HighScoreScreen extends JPanel {
     public HighScoreScreen (TetrisApp app) {
         List<UserScore> userScores = new ArrayList<>();
         userScores.add(new UserScore("Jacob", 100000));
-        userScores.add(new UserScore("Bob", 32302));
-        userScores.add(new UserScore("Alice", 23521));
-        userScores.add(new UserScore("John", 23455));
-        userScores.add(new UserScore("Mary", 2134));
+        userScores.add(new UserScore("Jonas", 32302));
+        userScores.add(new UserScore("Antu", 23521));
+        userScores.add(new UserScore("Matilda", 23455));
+        userScores.add(new UserScore("Sachin", 2134));
+        userScores.add(new UserScore("Garry", 1234));
+        userScores.add(new UserScore("Larry", 1234));
+        userScores.add(new UserScore("Billy", 1234));
+        userScores.add(new UserScore("Jarrod", 1234));
         userScores.add(new UserScore("Jane", 1234));
+
 
 
 
