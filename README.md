@@ -18,7 +18,7 @@ GitHub Repo for Software Engineering Project.
 - [ ] Add gameplay functionality
   - [x] Create canvas for game to be displayed on
   - [x] User input
-  - [ ] Create functions for generation of tetrominoes
+  - [x] Create functions for generation of tetrominoes
   - [ ] Make tetrominoes functional (falling, left, right, rotate)
   - [ ] Collisions for blocks when stacking
   - [ ] Create functions to remove lines when completed
