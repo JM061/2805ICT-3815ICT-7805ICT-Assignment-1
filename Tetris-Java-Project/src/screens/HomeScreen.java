@@ -42,8 +42,7 @@ public class HomeScreen extends JPanel {
         JButton exitButton = createNavigationbutton("Exit", "Exit", 150, 50, app);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the button
         buttonPanel.add(exitButton);
-
-               // Add action listener to the exit button to show confirmation dialog
+        // Add action listener to the exit button to show confirmation dialog
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
