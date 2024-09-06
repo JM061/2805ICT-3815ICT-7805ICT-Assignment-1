@@ -9,7 +9,7 @@ GitHub Repo for Software Engineering Project.
  - **S5307553** - Antu Saha (sahababa)
 
 
-# TO-DO List
+# TO-DO List Assignment 1
 - [x] Make buttons functional (navigate between screens)
 - [x] Add settings to config screen (non functional)
   - [x] Style Config Options
@@ -28,6 +28,37 @@ GitHub Repo for Software Engineering Project.
 - [x] Static High score screen (List of 10)
 - [ ] (MILESTONE 2) Access above file in high score screen and display values in a list 
   
-# Assignment 2 
+# TO-DO List Assignment 2 
 - Two player mode, differnet pieces instead of the same
 - Players can select to have either differnet or the same pieces when playing against each other
+- [ ] Read/Write JSON Files (User scores/configuration)
+ - [ ] Create new file for config and score
+ - [ ] Check if file exist before creating new files
+ - [ ] Add user scores to end of file
+ - [ ] edit the config file when user changes the config
+ - [ ] Sort high scores when displaying on high score page
+- [ ] Music and Sound Effects
+- [ ] Extended Mode
+ - [ ]  AI Play
+ - [ ]  Secondary Player
+  - [ ]  Use differnet keys to first player
+
+## Drawings / Diagrams
+- [ ] MVC Architectural Design Patterns
+ - [ ] Description of MVC
+ - [ ] Class Diagram
+ - [ ] Code Screenshot
+ - [ ] Alignment
+- [ ] Allocation Diagrams
+ - [ ] Implementation Style View
+ - [ ] Deployment Style View
+- [ ] Design Patterns
+ - [ ]  Singleton Design Patterns
+ - [ ]  Factory Design Pattern
+ - [ ]  Facade Design Pattern
+- [ ]  Good Programing Practices
+ - [ ] Sorting
+ - [ ] Lambda Expressions
+ - [ ] Multiple Threads
+ - [ ] Exception and Argument Validation Handling
+ - [ ] Testing
