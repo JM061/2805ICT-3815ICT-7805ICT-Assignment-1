@@ -11,6 +11,11 @@ public class TetrisApp {
     private GameDisplay gameDisplay;
 
     public TetrisApp() {
+
+
+        //start function xyz
+
+        //move all of this to another file
         SwingUtilities.invokeLater(() -> {
             applicationFrame = new JFrame("Tetris Application");
             applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

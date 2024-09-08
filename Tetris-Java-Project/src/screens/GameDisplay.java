@@ -47,7 +47,10 @@ public class GameDisplay extends JPanel {
 
 
         GameField gameField = new GameField(20, 10); // Example: 20 rows and 10 columns
+        //GameField gameField2 = new GameField(20, 10); // generate second play screen
+
         GamePanel.add(gameField);
+        //GamePanel.add(gameField2);
 
         // GameBox.add(gameField);
         //GameBox.setPreferredSize(new Dimension(200, 400));
