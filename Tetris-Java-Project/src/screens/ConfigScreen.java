@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.Color;
 import static Components.ComponentFactory.*;
 import static Components.ConfigSlider.*;
+import Game.GameSettings;
 
 public class ConfigScreen extends JPanel {
 
@@ -14,7 +15,7 @@ public class ConfigScreen extends JPanel {
     private JCheckBox AIPlayCheckbox;
     private JCheckBox extendedModeCheckbox;
 
-    public ConfigScreen(TetrisApp app) {
+    public ConfigScreen(TetrisApp app, GameSettings gameSettings) {
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("Configuration");
         titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));

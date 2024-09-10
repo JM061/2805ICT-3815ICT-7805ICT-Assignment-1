@@ -3,6 +3,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Game.GameSettings;
+
 
 import Game.*;
 
@@ -12,7 +14,10 @@ public class GameDisplay extends JPanel {
     public int panelHeight;
 
 
-    public GameDisplay(TetrisApp app) {
+    public GameDisplay(TetrisApp app, GameSettings gameSettings) {
+       //int fieldWidth  = gameSettings.getFieldWidth();
+       // int fieldHeight = gameSettings.getFieldHeight();
+
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("Play");
         titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));
@@ -45,8 +50,8 @@ public class GameDisplay extends JPanel {
         });
 
 
-
-        GameField gameField = new GameField(20, 10); // Example: 20 rows and 10 columns
+        GameField gameField = new GameField(20, 10);
+        //GameField gameField = new GameField(fieldWidth, fieldHeight); // 20 rows and 10 columns
         //GameField gameField2 = new GameField(20, 10); // generate second play screen
 
         GamePanel.add(gameField);
