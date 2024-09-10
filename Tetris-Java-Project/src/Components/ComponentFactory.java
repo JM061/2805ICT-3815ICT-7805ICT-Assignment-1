@@ -13,41 +13,46 @@ public class ComponentFactory {
     label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     return label;
 }
-//used to create the sliders with labels on config page
+    //used to create the sliders with labels on config page
     //needs text for label, min / max values for slider and initial value
-    public static JPanel createLabelWithSlider(String text, int min, int max, int initial) {
+    public static ConfigSlider createLabelWithSlider(String text, int min, int max, int initial) {
         JPanel panel = new JPanel(new BorderLayout(50, 100));
-        JLabel label = createLabel(text);
+        JLabel label = new JLabel(text);
         JSlider slider = new JSlider(min, max, initial);
         JLabel valueLabel = new JLabel(String.valueOf(initial)); // Label to display the slider's value
         slider.setMajorTickSpacing((max - min) / 5);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
 
-        // Update the valueLabel when the slider's value changes
+    //update the valueLabel when the slider's value changes
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                valueLabel.setText(String.valueOf(slider.getValue()));
-            }
-        });
-        JPanel sliderPanel = new JPanel(new BorderLayout());
-        sliderPanel.add(slider, BorderLayout.CENTER);
-        sliderPanel.add(valueLabel, BorderLayout.EAST); // Add the value label to the right of the slider
+            valueLabel.setText(String.valueOf(slider.getValue()));
+        }
+    });
 
-        panel.add(label, BorderLayout.WEST);
-        panel.add(sliderPanel, BorderLayout.CENTER);
-        return panel;
-    };
+    JPanel sliderPanel = new JPanel(new BorderLayout());
+    sliderPanel.add(slider, BorderLayout.CENTER);
+    sliderPanel.add(valueLabel, BorderLayout.EAST); // Add the value label to the right of the slider
+
+    panel.add(label, BorderLayout.WEST);
+    panel.add(sliderPanel, BorderLayout.CENTER);
+
+    return new ConfigSlider(panel, slider); // Return both the panel and the slider
+}
+
+
+
+
 
     //creates checkbox with label for config page
     //requires text for the title of label
-    public static JPanel createLabelWithCheckbox(String text) {
-        JPanel panel = new JPanel(new BorderLayout(50, 100));
-        JLabel label = createLabel(text);
-        JCheckBox checkBox = new JCheckBox();
+    public static JPanel createLabelWithCheckbox(String text, JCheckBox checkbox) {
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel label = new JLabel(text);
         panel.add(label, BorderLayout.WEST);
-        panel.add(checkBox, BorderLayout.EAST);
+        panel.add(checkbox, BorderLayout.EAST);
         return panel;
     }
 
@@ -61,9 +66,7 @@ public class ComponentFactory {
             navButton.setPreferredSize(navButtonSize);
             navButton.setMaximumSize(navButtonSize);
             navButton.setMinimumSize(navButtonSize);
-
             navButton.addActionListener(e -> app.showScreen(navLocation));
-
             navButton.setBackground(Color.WHITE);
             return navButton;
     }
