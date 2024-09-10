@@ -1,22 +1,27 @@
 package screens;
 
+import Game.GameSettings;
+
 import javax.swing.*;
 import java.awt.*;
-
+import DataHandling.ConfigHandler;
+import com.google.gson.JsonObject;
 
 public class TetrisApp {
     public JFrame applicationFrame;
     private JPanel mainPanel;
     private CardLayout cardLayout;
     private GameDisplay gameDisplay;
+    private GameSettings gameSettings;
+    public JsonObject settings;
 
     public TetrisApp() {
 
 
-        //start function xyz
-
         //move all of this to another file
         SwingUtilities.invokeLater(() -> {
+            settings = ConfigHandler.loadSettings();
+
             applicationFrame = new JFrame("Tetris Application");
             applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             applicationFrame.setSize(800, 800);
@@ -28,9 +33,9 @@ public class TetrisApp {
 
             // Create the different screens
             JPanel homeScreen = new HomeScreen(this);
-            JPanel configScreen = new ConfigScreen( this);
+            JPanel configScreen = new ConfigScreen( this, gameSettings);
             JPanel highScoreScreen = new HighScoreScreen(this);
-            gameDisplay = new GameDisplay(this);
+            gameDisplay = new GameDisplay(this, gameSettings);
 
             // Add screens to the main panel
             mainPanel.add(homeScreen, "Home");
