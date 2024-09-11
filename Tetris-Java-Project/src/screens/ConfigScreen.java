@@ -90,6 +90,14 @@ public class ConfigScreen extends JPanel {
         //add action listener to the event checkbox
         extendedModeCheckbox.addActionListener(e -> checkExtendedModeSelected());
 
+        musicCheckbox.addActionListener(e-> checkMusicSelected());
+
+        soundEffectsCheckbox.addActionListener(e->checkSoundEffectsSelected());
+
+        AIPlayCheckbox.addActionListener(e->checkAIPlaySelected());
+
+
+
 
         //add configOptions to display
         ConfigOptions.add(OptionsBox);
@@ -132,5 +140,30 @@ public class ConfigScreen extends JPanel {
             // Handle Extended Mode being disabled
         }
     }
+
+    public void checkMusicSelected() {
+        if (isMusicOn()) {
+            System.out.println("Music is on");
+        } else{
+            System.out.println("Music is off");
+        }
+    }
+
+    public void checkSoundEffectsSelected(){
+        if (isSoundEffectsOn()) {
+            System.out.println("Sound Effects is on");
+        } else {
+            System.out.println("Sound Effects is disabled");
+        }
+
+    }
+    public void checkAIPlaySelected(){
+        if (isAIPlayEnabled()) {
+            System.out.println("AI Play is on");
+        } else {
+            System.out.println("AI Play is off");
+        }
+    }
+
 }
 
