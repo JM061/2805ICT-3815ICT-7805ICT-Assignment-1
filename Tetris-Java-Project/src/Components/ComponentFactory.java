@@ -24,23 +24,20 @@ public class ComponentFactory {
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
 
-    //update the valueLabel when the slider's value changes
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-            valueLabel.setText(String.valueOf(slider.getValue()));
-        }
-    });
+        // Update the valueLabel when the slider'`s value changes
+        slider.addChangeListener(e -> valueLabel.setText(String.valueOf(slider.getValue())));
 
-    JPanel sliderPanel = new JPanel(new BorderLayout());
-    sliderPanel.add(slider, BorderLayout.CENTER);
-    sliderPanel.add(valueLabel, BorderLayout.EAST); // Add the value label to the right of the slider
+        JPanel sliderPanel = new JPanel(new BorderLayout());
+        sliderPanel.add(slider, BorderLayout.CENTER);
+        sliderPanel.add(valueLabel, BorderLayout.EAST); // Add the value label to the right of the slider
 
-    panel.add(label, BorderLayout.WEST);
-    panel.add(sliderPanel, BorderLayout.CENTER);
+        panel.add(label, BorderLayout.WEST);
+        panel.add(sliderPanel, BorderLayout.CENTER);
 
-    return new ConfigSlider(panel, slider); // Return both the panel and the slider
-}
+        return new ConfigSlider(panel, slider); // Return both the panel and the slider
+    }
+
+
 
 
 

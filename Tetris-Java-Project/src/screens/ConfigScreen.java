@@ -6,7 +6,11 @@ import java.awt.*;
 import java.awt.Color;
 import static Components.ComponentFactory.*;
 import static Components.ConfigSlider.*;
+
+import DataHandling.ConfigHandler;
 import Game.GameSettings;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ConfigScreen extends JPanel {
 
@@ -16,6 +20,7 @@ public class ConfigScreen extends JPanel {
     private JCheckBox extendedModeCheckbox;
 
     public ConfigScreen(TetrisApp app, GameSettings gameSettings) {
+
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("Configuration");
         titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));
@@ -43,8 +48,19 @@ public class ConfigScreen extends JPanel {
         Box OptionsBox = Box.createVerticalBox();
 
         // Create labels with slider inputs
-        ConfigSlider widthSlider = createLabelWithSlider("Field Width: ", 0, 20, 5);
-        ConfigSlider heightSlider = createLabelWithSlider("Field Height: ", 0, 20, 5);
+        int fieldWidth = gameSettings.getFieldWidth();
+        ConfigSlider widthSlider = createLabelWithSlider("Field Width: ", 5, 20, 10);
+        widthSlider.getSlider().addChangeListener(e -> {
+            int newWidth = widthSlider.getSlider().getValue();
+            ConfigHandler.setFieldWidth(newWidth); // Save the new width to the config file
+        });
+
+        int fieldHeight = gameSettings.getFieldHeight();
+        ConfigSlider heightSlider = createLabelWithSlider("Field Height: ", 10, 30, 20);
+        heightSlider.getSlider().addChangeListener(e -> {
+            int newHeight = heightSlider.getSlider().getValue();
+            ConfigHandler.setFieldWidth(newHeight); // Save the new height to the config file
+        });
         ConfigSlider gameLevelSlider = createLabelWithSlider("Game Level: ", 0, 20, 5);
 
         // Add sliders to OptionsBox with vertical gaps
@@ -78,7 +94,13 @@ public class ConfigScreen extends JPanel {
         //add configOptions to display
         ConfigOptions.add(OptionsBox);
         add(ConfigOptions, BorderLayout.CENTER);
+
+
+
+
     }
+
+
 
     // Method to check if extended mode is selected
     public boolean isExtendedModeEnabled() {

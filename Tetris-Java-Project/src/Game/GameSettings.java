@@ -1,4 +1,6 @@
 package Game;
+import DataHandling.ConfigHandler;
+import DataHandling.ConfigHandler.*;
 
 public class GameSettings {
     private int fieldWidth;
@@ -10,14 +12,19 @@ public class GameSettings {
 
 
     public int getFieldHeight() {
-        return fieldHeight;
+        this.fieldHeight = ConfigHandler.getFieldHeight();
+        System.out.println(this.fieldHeight);
+        return this.fieldHeight;
     }
     public void setFieldHeight(int fieldHeight) {
         this.fieldHeight = fieldHeight; }
 
 
     public int getFieldWidth() {
-        return fieldWidth;
+         this.fieldWidth = ConfigHandler.getFieldWidth();
+        System.out.println(this.fieldWidth);
+
+        return this.fieldWidth;
     }
     public void setFieldWidth(int fieldWidth) {
         this.fieldWidth = fieldWidth;
