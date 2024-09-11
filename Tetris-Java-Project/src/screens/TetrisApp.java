@@ -16,7 +16,7 @@ public class TetrisApp {
     public JsonObject settings;
 
     public TetrisApp() {
-
+        this.gameSettings = new GameSettings(); // Create an instance or load it from config
 
         //move all of this to another file
         SwingUtilities.invokeLater(() -> {

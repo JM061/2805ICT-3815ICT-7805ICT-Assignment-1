@@ -10,4 +10,12 @@ public class ConfigSlider {
         this.slider = slider;
     }
 
+    // Expose the JSlider instance so you can add a ChangeListener
+    public JSlider getSlider() {
+        return slider;
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
 }

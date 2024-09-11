@@ -10,13 +10,16 @@ import Game.*;
 
 public class GameDisplay extends JPanel {
     private TetrisApp app;
+    private GameSettings gameSettings
+            ;
     public int panelWidth;
     public int panelHeight;
 
 
-    public GameDisplay(TetrisApp app, GameSettings gameSettings) {
-       //int fieldWidth  = gameSettings.getFieldWidth();
-       // int fieldHeight = gameSettings.getFieldHeight();
+    public GameDisplay(TetrisApp app, GameSettings settings) {
+        this.gameSettings = settings;
+       int fieldWidth  = gameSettings.getFieldWidth();
+       int fieldHeight = gameSettings.getFieldHeight();
 
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("Play");
@@ -50,7 +53,7 @@ public class GameDisplay extends JPanel {
         });
 
 
-        GameField gameField = new GameField(20, 10);
+        GameField gameField = new GameField(fieldHeight, fieldWidth);
         //GameField gameField = new GameField(fieldWidth, fieldHeight); // 20 rows and 10 columns
         //GameField gameField2 = new GameField(20, 10); // generate second play screen
 
