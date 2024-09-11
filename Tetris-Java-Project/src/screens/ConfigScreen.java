@@ -59,7 +59,7 @@ public class ConfigScreen extends JPanel {
         ConfigSlider heightSlider = createLabelWithSlider("Field Height: ", 10, 30, 20);
         heightSlider.getSlider().addChangeListener(e -> {
             int newHeight = heightSlider.getSlider().getValue();
-            ConfigHandler.setFieldWidth(newHeight); // Save the new height to the config file
+            ConfigHandler.setFieldHeight(newHeight); // Save the new height to the config file
         });
         ConfigSlider gameLevelSlider = createLabelWithSlider("Game Level: ", 0, 20, 5);
 
