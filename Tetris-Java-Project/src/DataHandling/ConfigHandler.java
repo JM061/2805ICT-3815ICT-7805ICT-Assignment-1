@@ -111,6 +111,88 @@ public class ConfigHandler {
     }
 
 
+    public static void setMusic(boolean musicStatus){
+        try (FileReader reader = new FileReader(CONFIG_FILE)){
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            jsonObject.addProperty("musicEnabled", musicStatus);
+
+
+            try(FileWriter writer = new FileWriter(CONFIG_FILE)){
+                writer.write(jsonObject.toString());
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+public static void setSoundEffects(boolean soundEffectStatus){
+    try (FileReader reader = new FileReader(CONFIG_FILE)){
+        JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+        jsonObject.addProperty("soundEffectsEnabled", soundEffectStatus);
+
+
+        try(FileWriter writer = new FileWriter(CONFIG_FILE)){
+            writer.write(jsonObject.toString());
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+}
+
+public static void setExtendedMode(boolean extendedStatus){
+    try (FileReader reader = new FileReader(CONFIG_FILE)){
+        JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+        jsonObject.addProperty("extendedMode", extendedStatus);
+
+
+        try(FileWriter writer = new FileWriter(CONFIG_FILE)){
+            writer.write(jsonObject.toString());
+            writer.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+}
+
+    public static boolean getExtendedMode(){
+        try (FileReader reader = new FileReader(CONFIG_FILE)) {
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            return jsonObject.get("extendedMode").getAsBoolean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Return default value if something goes wrong
+        }
+    }
+
+    public static boolean getMusicStatus(){
+        try (FileReader reader = new FileReader(CONFIG_FILE)){
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            return jsonObject.get("musicEnabled").getAsBoolean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static boolean getSoundEffectsStatus(){
+        try(FileReader reader = new FileReader(CONFIG_FILE)){
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            return jsonObject.get("soundEffectsEnabled").getAsBoolean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
 
 

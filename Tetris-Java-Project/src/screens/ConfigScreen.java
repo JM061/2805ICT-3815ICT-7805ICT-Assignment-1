@@ -87,10 +87,11 @@ public class ConfigScreen extends JPanel {
         OptionsBox.add(Box.createRigidArea(new Dimension(0, 15)));
         OptionsBox.add(createLabelWithCheckbox("Extend Mode (ON | OFF):", extendedModeCheckbox));
 
-        //add action listener to the event checkbox
+        //add act3ion listener to the event checkbox
         extendedModeCheckbox.addActionListener(e -> checkExtendedModeSelected());
 
         musicCheckbox.addActionListener(e-> checkMusicSelected());
+        //musicCheckbox.
 
         soundEffectsCheckbox.addActionListener(e->checkSoundEffectsSelected());
 
@@ -134,9 +135,11 @@ public class ConfigScreen extends JPanel {
     public void checkExtendedModeSelected() {
         if (isExtendedModeEnabled()) {
             System.out.println("Extended Mode is enabled");
+            ConfigHandler.setExtendedMode(isExtendedModeEnabled());
             // Perform actions related to Extended Mode
         } else {
             System.out.println("Extended Mode is disabled");
+            ConfigHandler.setExtendedMode(isExtendedModeEnabled());
             // Handle Extended Mode being disabled
         }
     }
@@ -144,16 +147,22 @@ public class ConfigScreen extends JPanel {
     public void checkMusicSelected() {
         if (isMusicOn()) {
             System.out.println("Music is on");
+            ConfigHandler.setMusic(isMusicOn());
         } else{
             System.out.println("Music is off");
+            ConfigHandler.setMusic(isMusicOn());
+
         }
     }
 
     public void checkSoundEffectsSelected(){
         if (isSoundEffectsOn()) {
             System.out.println("Sound Effects is on");
+            ConfigHandler.setSoundEffects(isSoundEffectsOn());
         } else {
             System.out.println("Sound Effects is disabled");
+            ConfigHandler.setSoundEffects(isSoundEffectsOn());
+
         }
 
     }

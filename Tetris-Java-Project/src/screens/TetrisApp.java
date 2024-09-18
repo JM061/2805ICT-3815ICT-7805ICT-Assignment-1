@@ -7,6 +7,7 @@ import java.awt.*;
 import DataHandling.ConfigHandler;
 import com.google.gson.JsonObject;
 
+
 public class TetrisApp {
     public JFrame applicationFrame;
     private JPanel mainPanel;
@@ -45,7 +46,7 @@ public class TetrisApp {
 
             // Show the home screen initially
             cardLayout.show(mainPanel, "Home");
-
+           // System.out.println("CURRENT GAME STATUS:" + GAME_STATUS);
             applicationFrame.add(mainPanel);
             applicationFrame.setVisible(true);
         });

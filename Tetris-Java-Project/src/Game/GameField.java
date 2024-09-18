@@ -150,17 +150,18 @@ public class GameField extends JPanel {
     }
 
     private boolean canMoveTo(Tetromino tetromino, int newX, int newY) {
-        for (Point block : tetromino.getBlocks()) {
-            int newCol = block.x + newX;
-            int newRow = block.y + newY;
+            for (Point block : tetromino.getBlocks()) {
+                int newCol = block.x + newX;
+                int newRow = block.y + newY;
 
-            // Check if the new position is within the grid bounds
-            if (newCol < 0 || newCol >= cols || newRow < 0 || newRow >= rows || grid[newRow][newCol] != null) {
-                return false;
+                // Check if the new position is within the grid bounds
+                if (newCol < 0 || newCol >= cols || newRow < 0 || newRow >= rows || grid[newRow][newCol] != null) {
+                    return false;
+                }
             }
-        }
-        return true;
-    }
+            return true;
+       }
+
 
 
 
@@ -177,21 +178,23 @@ public class GameField extends JPanel {
     }
 
     private void placeTetromino() {
-        Color tetrominoColor = currentTetromino.getColor();  // Get the color of the current Tetromino
-        for (Point block : currentTetromino.getBlocks()) {
-            int gridX = currentTetromino.getX() + block.x;
-            int gridY = currentTetromino.getY() + block.y;
+        if (GAME_STATUS == GAME_STARTED) {
+            Color tetrominoColor = currentTetromino.getColor();  // Get the color of the current Tetromino
+            for (Point block : currentTetromino.getBlocks()) {
+                int gridX = currentTetromino.getX() + block.x;
+                int gridY = currentTetromino.getY() + block.y;
 
-            // Store the color of the block in the grid
-            grid[gridY][gridX] = tetrominoColor;
+                // Store the color of the block in the grid
+                grid[gridY][gridX] = tetrominoColor;
+            }
+
+            // Clear any full rows after placing the Tetromino
+            clearFullRows();
+            placedTetrominos.add(currentTetromino);
+            spawnTetromino();
+
+            repaint();  // Repaint the game field after updating the grid
         }
-
-        // Clear any full rows after placing the Tetromino
-        clearFullRows();
-        placedTetrominos.add(currentTetromino);
-        spawnTetromino();
-
-        repaint();  // Repaint the game field after updating the grid
     }
 
 

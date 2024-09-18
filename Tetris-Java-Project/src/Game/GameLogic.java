@@ -5,12 +5,13 @@ import java.awt.Point;
 
 public class GameLogic {
     // Game status constants
+    private static final int GAME_PRESTART = 0;
     private static final int GAME_STARTED = 1;
     private static final int GAME_PAUSED = 2;
     private static final int GAME_FINISHED = 3;
 
     // Variable to track the current game status
-    private int GAME_STATUS = GAME_STARTED;
+    private int GAME_STATUS = GAME_PRESTART;
 
     private int[][] grid;
     private final int rows = 20;
@@ -61,45 +62,52 @@ public class GameLogic {
 
     // Check if the Tetromino can move to the specified position
     public boolean canMoveTo(Tetromino tetromino, int newX, int newY) {
-        for (Point block : tetromino.getBlocks()) {
-            int gridX = newX + block.x;
-            int gridY = newY + block.y;
+        if(GAME_STATUS == GAME_STARTED){
+            for (Point block : tetromino.getBlocks()) {
+                int gridX = newX + block.x;
+                int gridY = newY + block.y;
 
-            // Check if the new position is outside the grid bounds
-            if (gridX < 0 || gridX >= cols || gridY < 0 || gridY >= rows) {
-                return false;  // Out of bounds
-            }
+                // Check if the new position is outside the grid bounds
+                if (gridX < 0 || gridX >= cols || gridY < 0 || gridY >= rows) {
+                    return false;  // Out of bounds
+                }
 
-            // Check if the new position collides with other blocks in the grid
-            if (grid[gridY][gridX] != 0) {
-                return false;  // Collision detected
+                // Check if the new position collides with other blocks in the grid
+                if (grid[gridY][gridX] != 0) {
+                    return false;  // Collision detected
+                }
             }
         }
         return true;  // No collision, movement is possible
     }
 
+
     // Method to spawn a new Tetromino and check for game over condition
     public void spawnTetromino() {
-        TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
-        currentTetromino = new Tetromino(randomShape, cols / 2, 0);
+        if(GAME_STATUS == GAME_STARTED) {
+            TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
+            currentTetromino = new Tetromino(randomShape, cols / 2, 0);
 
-        // Check if the new Tetromino can be placed at the top
-        if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
-            gameOver();  // End the game if the new Tetromino cannot be placed
+            // Check if the new Tetromino can be placed at the top
+            if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
+                gameOver();  // End the game if the new Tetromino cannot be placed
+            }
         }
     }
 
     // Place the Tetromino and update the grid
     public void placeTetromino() {
-        for (Point block : currentTetromino.getBlocks()) {
-            int gridX = currentTetromino.getX() + block.x;
-            int gridY = currentTetromino.getY() + block.y;
+        if (GAME_STATUS == GAME_STARTED) {
+            for (Point block : currentTetromino.getBlocks()) {
+                int gridX = currentTetromino.getX() + block.x;
+                int gridY = currentTetromino.getY() + block.y;
 
-            // Mark the grid cell as occupied
-            grid[gridY][gridX] = 1;
+                // Mark the grid cell as occupied
+                grid[gridY][gridX] = 1;
+            }
+
+            // Spawn a new Tetromino after placing the current one
+            spawnTetromino();
         }
-
-        // Spawn a new Tetromino after placing the current one
-        spawnTetromino();
     }
 }
