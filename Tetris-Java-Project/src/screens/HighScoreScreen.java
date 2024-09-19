@@ -1,15 +1,19 @@
 package screens;
 
+import DataHandling.ScoreHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 
 import static Components.ComponentFactory.*;
 
 class UserScore {
     String username;
     int score;
+
     UserScore(String username, int score) {
         this.username = username;
         this.score = score;
@@ -18,61 +22,78 @@ class UserScore {
 
 public class HighScoreScreen extends JPanel {
     private TetrisApp app;
-    public HighScoreScreen (TetrisApp app) {
-        List<UserScore> userScores = new ArrayList<>();
-        userScores.add(new UserScore("Jacob", 100000));
-        userScores.add(new UserScore("Jonas", 32302));
-        userScores.add(new UserScore("Antu", 23521));
-        userScores.add(new UserScore("Matilda", 23455));
-        userScores.add(new UserScore("Sachin", 2134));
-        userScores.add(new UserScore("Garry", 1234));
-        userScores.add(new UserScore("Larry", 1234));
-        userScores.add(new UserScore("Billy", 1234));
-        userScores.add(new UserScore("Jarrod", 1234));
-        userScores.add(new UserScore("Jane", 1234));
+    private JPanel scoreDisplayPanel; // Panel for scores or message
 
-
-
+    public HighScoreScreen(TetrisApp app) {
+        this.app = app;
 
         setLayout(new BorderLayout());
+
+        // Title label
         JLabel titleLabel = new JLabel("High Scores");
         titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(titleLabel, BorderLayout.NORTH);
-        //panel creation
-        JPanel titlePanel = new JPanel();
-        JPanel buttonPanel = new JPanel();
-        JPanel ScoreDisplayPanel = new JPanel();
-        Box scoreDisplaysVertical = Box.createVerticalBox();
 
-        for (UserScore userScore : userScores) {
-            scoreDisplaysVertical.add(createUserScoreLabel(userScore.username, userScore.score));
-        }
+        // Panel for score display or message
+        scoreDisplayPanel = new JPanel();
+        add(scoreDisplayPanel, BorderLayout.CENTER);
 
-
-        //button creation
-
-
-        ScoreDisplayPanel.add(scoreDisplaysVertical);
-
+        // Back button creation
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> app.showScreen("Home"));
         backButton.setBackground(Color.WHITE);
         backButton.setPreferredSize(new Dimension(100, 50));
-        //backButton.setBorder(new RoundedBorder(Color.LIGHT_GRAY, 1, 10));
 
-        //title creation
-        //Adding buttons to buttonPanel
+        JPanel buttonPanel = new JPanel();
         buttonPanel.add(backButton);
-
-
-        //Set location of panels
-        add(ScoreDisplayPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.PAGE_END);
 
+        // Load and display scores
+        displayScores();
     }
 
+    // Load user scores and update the score display
+    private void displayScores() {
+        List<UserScore> userScores = loadUserScores();
 
+        // Clear previous content in the score display panel
+        scoreDisplayPanel.removeAll();
+        if (!userScores.isEmpty()) {
+            // Display user scores
+            Box scoreDisplaysVertical = Box.createVerticalBox();
+            for (UserScore userScore : userScores) {
+                scoreDisplaysVertical.add(createUserScoreLabel(userScore.username, userScore.score));
+            }
+            scoreDisplayPanel.add(scoreDisplaysVertical);
+        } else {
+            // Display "No scores available yet" message
+            JLabel noScoresLabel = new JLabel("No scores available yet.");
+            noScoresLabel.setFont(new Font("Dialog", Font.PLAIN, 18));
+            noScoresLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            scoreDisplayPanel.add(noScoresLabel, BorderLayout.CENTER);
+        }
 
+        // Refresh the panel
+        scoreDisplayPanel.repaint();
+    }
 
+    // Load scores from ScoreHandler
+    private List<UserScore> loadUserScores() {
+        List<UserScore> userScores = new ArrayList<>();
+
+        // Use ScoreHandler to load scores from file
+        JsonObject scores = ScoreHandler.loadScores();
+
+        // Parse the loaded JSON scores
+        for (String username : scores.keySet()) {
+            JsonElement scoreElement = scores.get(username);
+            if (scoreElement != null && scoreElement.isJsonPrimitive()) {
+                int score = scoreElement.getAsInt();
+                userScores.add(new UserScore(username, score));
+            }
+        }
+
+        return userScores;
+    }
 }
