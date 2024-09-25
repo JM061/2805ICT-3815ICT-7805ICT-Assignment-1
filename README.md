@@ -31,11 +31,11 @@ GitHub Repo for Software Engineering Project.
 # TO-DO List Assignment 2 
 - Two player mode, differnet pieces instead of the same
 - Players can select to have either differnet or the same pieces when playing against each other
-- [ ] Read/Write JSON Files (User scores/configuration)
-  - [ ] Create new file for config and score
-  - [ ] Check if file exist before creating new files
+- [x] Read/Write JSON Files (User scores/configuration)
+  - [x] Create new file for config and score
+  - [x] Check if file exist before creating new files
   - [ ] Add user scores to end of file
-  - [ ] edit the config file when user changes the config
+  - [x] edit the config file when user changes the config
   - [ ] Sort high scores when displaying on high score page
 - [ ] Music and Sound Effects
 - [ ] Extended Mode
