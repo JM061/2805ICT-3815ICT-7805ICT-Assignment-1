@@ -34,7 +34,7 @@ GitHub Repo for Software Engineering Project.
 - [x] Read/Write JSON Files (User scores/configuration)
   - [x] Create new file for config and score
   - [x] Check if file exist before creating new files
-  - [ ] Add user scores to end of file
+  - [x] Add user scores to end of file
   - [x] edit the config file when user changes the config
   - [ ] Sort high scores when displaying on high score page
 - [ ] Music and Sound Effects
