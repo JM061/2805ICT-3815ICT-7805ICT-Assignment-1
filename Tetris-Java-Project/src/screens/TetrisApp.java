@@ -8,6 +8,7 @@ import DataHandling.ConfigHandler;
 import com.google.gson.JsonObject;
 
 
+
 public class TetrisApp {
     public JFrame applicationFrame;
     private JPanel mainPanel;
@@ -15,6 +16,7 @@ public class TetrisApp {
     private GameDisplay gameDisplay;
     private GameSettings gameSettings;
     public JsonObject settings;
+    private HighScoreScreen highScoreScreen;
 
     public TetrisApp() {
         this.gameSettings = new GameSettings(); // Create an instance or load it from config
@@ -31,11 +33,10 @@ public class TetrisApp {
 
             cardLayout = new CardLayout();
             mainPanel = new JPanel(cardLayout);
-
             // Create the different screens
             JPanel homeScreen = new HomeScreen(this);
             JPanel configScreen = new ConfigScreen( this, gameSettings);
-            JPanel highScoreScreen = new HighScoreScreen(this);
+            highScoreScreen = new HighScoreScreen(this);
             gameDisplay = new GameDisplay(this, gameSettings);
 
             // Add screens to the main panel
@@ -54,6 +55,10 @@ public class TetrisApp {
 
     public void showScreen(String screenName) {
        cardLayout.show(mainPanel, screenName);
+       if (screenName.equals("HighScores")){
+        highScoreScreen.refreshScores();//refreshes scores when page is loaded
+       }
+
     }
 
     public static void main(String[] args) {
