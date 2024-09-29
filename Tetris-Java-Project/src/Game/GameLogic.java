@@ -45,7 +45,6 @@ public class GameLogic {
     public void gameOver() {
         GAME_STATUS = GAME_FINISHED;
         System.out.println("Game Over!");
-        // Additional game-over handling logic here (e.g., stop the game loop)
     }
 
     // Method to rotate the current Tetromino

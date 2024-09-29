@@ -42,4 +42,13 @@ public class ScoreHandler{
 
 
 
+    public static void saveScores(JsonObject scores) {
+        try (FileWriter writer = new FileWriter(SCORE_FILE)) {
+            gson.toJson(scores, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
