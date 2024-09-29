@@ -53,6 +53,15 @@ public class HighScoreScreen extends JPanel {
         displayScores();
     }
 
+    //refresh scores on load
+    public void refreshScores() {
+        displayScores();
+        System.out.println("Refreshed Scores");
+        revalidate();
+        repaint();
+    }
+
+
     // Load user scores and update the score display
     private void displayScores() {
         List<UserScore> userScores = loadUserScores();

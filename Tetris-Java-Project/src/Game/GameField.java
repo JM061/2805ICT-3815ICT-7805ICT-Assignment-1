@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import DataHandling.ScoreHandler;
+import DataHandling.ScoreHandler.*;
+import com.google.gson.JsonObject;
+
+
 public class GameField extends JPanel {
     private final Color[][] grid;
     private int rows;
@@ -22,6 +27,8 @@ public class GameField extends JPanel {
     private Map<String, Action> actions;
     private Timer timer;
     private static final int DROP_DELAY = 500; // delay in milliseconds
+
+    private int score = 0; //sets default score of 0
 
     public GameField(int rows, int cols) {
         this.rows = rows;
@@ -213,6 +220,8 @@ public class GameField extends JPanel {
             if (isRowFull) {
                 clearRow(row);
                 shiftRowsDown(row);
+                score += 100;
+                System.out.println("Row Cleared. Current Score is: "+ score);
                 row--;  // Check the same row again after shifting, as it now contains the row above
             }
         }
@@ -258,7 +267,28 @@ public class GameField extends JPanel {
         GAME_STATUS = GAME_FINISHED;
         timer.stop();  // Stop the game loop
         JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        // Additional game-over logic, such as restarting or returning to the main menu, can go here
+        userScoreEntry();
+    }
+
+    private void userScoreEntry(){
+        // Show input dialog for username
+        String username = JOptionPane.showInputDialog("Game Over! Enter your username:");
+
+        if (username != null && !username.trim().isEmpty()) {
+            saveUserScore(username, score); // Save score if username entered
+        } else {
+            System.out.println("No username entered, score not saved.");
+        }
+    }
+
+    public void saveUserScore(String username, int score) {
+        JsonObject scores = ScoreHandler.loadScores();
+
+        // Add or update the user's score
+        scores.addProperty(username, score);
+
+        // Save the updated scores back to the file
+        ScoreHandler.saveScores(scores);
     }
 
     private boolean canMoveDown(Tetromino tetromino) {
