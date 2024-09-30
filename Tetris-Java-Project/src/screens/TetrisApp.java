@@ -1,12 +1,13 @@
 package screens;
 
+import Game.GameField;
 import Game.GameSettings;
 
 import javax.swing.*;
 import java.awt.*;
 import DataHandling.ConfigHandler;
 import com.google.gson.JsonObject;
-
+import Game.GameField.*;
 
 
 public class TetrisApp {
@@ -55,10 +56,9 @@ public class TetrisApp {
 
     public void showScreen(String screenName) {
        cardLayout.show(mainPanel, screenName);
-       if (screenName.equals("HighScores")){
-        highScoreScreen.refreshScores();//refreshes scores when page is loaded
+       if (screenName.equals("HighScores")) {
+           highScoreScreen.refreshScores();//refreshes scores when page is loaded
        }
-
     }
 
     public static void main(String[] args) {
