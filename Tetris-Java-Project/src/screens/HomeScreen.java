@@ -6,11 +6,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static Components.ComponentFactory.*;
 
-public class HomeScreen extends JPanel {
+import Game.GameField;
+import Game.GameField.*;
 
+public class HomeScreen extends JPanel {
     public HomeScreen(TetrisApp app) {
         setLayout(new BorderLayout());
-
         // Create title label
         JLabel titleLabel = new JLabel("Tetris");
         titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));

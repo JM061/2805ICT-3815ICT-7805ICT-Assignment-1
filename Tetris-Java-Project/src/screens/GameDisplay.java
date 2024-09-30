@@ -4,16 +4,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import Game.GameSettings;
+import Game.GameField.*;
 
 
 import Game.*;
 
 public class GameDisplay extends JPanel {
     private TetrisApp app;
-    private GameSettings gameSettings
-            ;
+    private GameSettings gameSettings;
     public int panelWidth;
     public int panelHeight;
+    private GameField gameField;
 
 
     public GameDisplay(TetrisApp app, GameSettings settings) {
@@ -54,18 +55,12 @@ public class GameDisplay extends JPanel {
 
 
         GameField gameField = new GameField(fieldHeight, fieldWidth);
+
         //GameField gameField = new GameField(fieldWidth, fieldHeight); // 20 rows and 10 columns
         //GameField gameField2 = new GameField(20, 10); // generate second play screen
 
         GamePanel.add(gameField);
         //GamePanel.add(gameField2);
-
-        // GameBox.add(gameField);
-        //GameBox.setPreferredSize(new Dimension(200, 400));
-        //GamePanel.setBackground(Color.WHITE);
-
-
-
 
         //Adding buttons to buttonPanel
         buttonPanel.add(backButton);
@@ -76,4 +71,6 @@ public class GameDisplay extends JPanel {
         add(GamePanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.PAGE_END);
     }
+
+
 }
