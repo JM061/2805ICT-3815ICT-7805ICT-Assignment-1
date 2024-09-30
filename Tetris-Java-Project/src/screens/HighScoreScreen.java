@@ -45,8 +45,16 @@ public class HighScoreScreen extends JPanel {
         backButton.setBackground(Color.WHITE);
         backButton.setPreferredSize(new Dimension(100, 50));
 
+        JButton clearScoresButton = new JButton("Clear Scores");
+        clearScoresButton.setBackground(Color.WHITE);
+        clearScoresButton.setPreferredSize(new Dimension(125, 50));
+        clearScoresButton.addActionListener(e -> {
+            ScoreHandler.removeScores();
+            this.refreshScores();});
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(backButton);
+        buttonPanel.add(clearScoresButton);
         add(buttonPanel, BorderLayout.PAGE_END);
 
         // Load and display scores
@@ -90,11 +98,9 @@ public class HighScoreScreen extends JPanel {
     // Load scores from ScoreHandler
     private List<UserScore> loadUserScores() {
         List<UserScore> userScores = new ArrayList<>();
-
-        // Use ScoreHandler to load scores from file
         JsonObject scores = ScoreHandler.loadScores();
 
-        // Parse the loaded JSON scores
+        // Parse and add scores to the list
         for (String username : scores.keySet()) {
             JsonElement scoreElement = scores.get(username);
             if (scoreElement != null && scoreElement.isJsonPrimitive()) {
@@ -102,6 +108,9 @@ public class HighScoreScreen extends JPanel {
                 userScores.add(new UserScore(username, score));
             }
         }
+
+        // Sort the list by score in descending order
+        userScores.sort((u1, u2) -> Integer.compare(u2.score, u1.score));
 
         return userScores;
     }

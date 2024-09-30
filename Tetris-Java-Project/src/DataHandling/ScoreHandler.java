@@ -2,11 +2,19 @@ package DataHandling;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import DataHandling.UserScore;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 
 public class ScoreHandler{
     public static final String SCORE_FILE = "gameScores.json";
@@ -42,13 +50,85 @@ public class ScoreHandler{
 
 
 
-    public static void saveScores(JsonObject scores) {
+    public static void saveTopScores(List<UserScore> topScores) {
+        JsonObject scores = new JsonObject();
+        for (UserScore userScore : topScores) {
+            scores.addProperty(userScore.username, userScore.score);
+        }
+
         try (FileWriter writer = new FileWriter(SCORE_FILE)) {
-            gson.toJson(scores, writer);
+            writer.write(scores.toString());
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static List<UserScore> loadTopScores() {
+        List<UserScore> userScores = new ArrayList<>();
+        JsonObject scores = loadScores();
+
+        for (String username : scores.keySet()) {
+            JsonElement scoreElement = scores.get(username);
+            if (scoreElement != null && scoreElement.isJsonPrimitive()) {
+                int score = scoreElement.getAsInt();
+                userScores.add(new UserScore(username, score));
+            }
+        }
+
+        Collections.sort(userScores, (a, b) -> Integer.compare(b.score, a.score));
+        return userScores;
+    }
+
+    public static void addNewScore(String username, int score) {
+        List<UserScore> topScores = loadTopScores();
+        topScores.add(new UserScore(username, score));
+
+        Collections.sort(topScores, (a, b) -> Integer.compare(b.score, a.score));
+
+        if (topScores.size() > 10) {
+            topScores = topScores.subList(0, 10);
+        }
+
+        saveTopScores(topScores);
+    }
+
+    public static void removeScores() {
+        // Prompt the user for confirmation
+        int response = JOptionPane.showConfirmDialog(null,
+                "Are you sure you want to remove all scores?",
+                "Confirm Removal",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        // If the user confirms, proceed to remove scores
+        if (response == JOptionPane.YES_OPTION) {
+            try {
+                // Read the existing scores
+                FileReader reader = new FileReader(SCORE_FILE);
+                JsonObject scores = JsonParser.parseReader(reader).getAsJsonObject();
+                reader.close();
+
+                // Clear all scores
+                scores.entrySet().clear();
+
+                // Write the updated JSON back to the file
+                try (FileWriter writer = new FileWriter(SCORE_FILE)) {
+                    writer.write(scores.toString());
+                    writer.flush();
+                }
+                JOptionPane.showMessageDialog(null, "Scores have been removed successfully.",
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "An error occurred while removing scores.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+    }
 
 }
+
+
+
