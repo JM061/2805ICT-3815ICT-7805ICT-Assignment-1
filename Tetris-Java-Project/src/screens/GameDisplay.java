@@ -38,7 +38,7 @@ public class GameDisplay extends JPanel {
         backButton.setBackground(Color.WHITE);
         backButton.setPreferredSize(new Dimension(100, 50));
         backButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        backButton.addActionListener(new ActionListener() {C
+        backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int response = JOptionPane.showConfirmDialog(app.getFrame(),
