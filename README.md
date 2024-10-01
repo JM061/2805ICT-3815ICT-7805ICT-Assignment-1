@@ -36,12 +36,13 @@ GitHub Repo for Software Engineering Project.
   - [x] Check if file exist before creating new files
   - [x] Add user scores to end of file
   - [x] edit the config file when user changes the config
-  - [ ] Sort high scores when displaying on high score page
+  - [x] Sort high scores when displaying on high score page
 - [ ] Music and Sound Effects
 - [ ] Extended Mode
   - [ ]  AI Play
   - [ ]  Secondary Player
   - [ ]  Use differnet keys to first player
+  - [ ]  Connection to TetrisServer Provided
 
 ## Drawings / Diagrams
 - [ ] MVC Architectural Design Patterns
@@ -57,8 +58,8 @@ GitHub Repo for Software Engineering Project.
   - [ ]  Factory Design Pattern
   - [ ]  Facade Design Pattern
 - [ ]  Good Programing Practices
-  - [ ] Sorting
-  - [ ] Lambda Expressions
+  - [x] Sorting
+  - [x] Lambda Expressions
   - [ ] Multiple Threads
-  - [ ] Exception and Argument Validation Handling
+  - [x] Exception and Argument Validation Handling
   - [ ] Testing
