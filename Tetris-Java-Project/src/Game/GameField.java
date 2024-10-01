@@ -13,39 +13,81 @@ public class GameField extends JPanel {
     private int rows;
     private int cols;
     private Tetromino currentTetromino;
-    private ArrayList<Tetromino> placedTetrominos; // List to store placed tetrominos
+    private ArrayList<Tetromino> placedTetrominos;
     private final int GAME_STARTED = 1;
     private final int GAME_PAUSED = 2;
     private final int GAME_FINISHED = 3;
     public int GAME_STATUS = GAME_STARTED;
 
     private Map<String, Action> actions;
-    private Timer timer;
     private static final int DROP_DELAY = 500; // delay in milliseconds
+
+    //Creating a thread for handling the Tetromino movement
+    private Thread gameThread;
 
     public GameField(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        this.grid = new Color[rows][cols];  // Store colors instead of integers
-        this.setPreferredSize(new Dimension(251, 501)); // Set preferred size
+        this.grid = new Color[rows][cols];
+        this.setPreferredSize(new Dimension(251, 501));
         this.setBackground(Color.WHITE);
-        this.placedTetrominos = new ArrayList<>(); // Ensure it's initialized here
+        this.placedTetrominos = new ArrayList<>();
         setFocusable(true);
-        requestFocusInWindow();//sets focus on window to allow keyboard inputs
-        setupKeyBindings();//function to setup keybindings
+        requestFocusInWindow(); // Set focus on window to allow keyboard inputs
+        setupKeyBindings(); // Function to setup keybindings
 
-        // Generates the first tetromino on page load
-        TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
-        currentTetromino = new Tetromino(randomShape, cols / 2, 0);
+        // Generates the first Tetromino on page load
+        spawnTetromino();  // Make sure this is called before the thread starts
 
-        // Initialize and start the timer for automatic tetromino movement
-        timer = new Timer(DROP_DELAY, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveTetrominoDown();
+        // Start the game logic thread
+        gameThread = new Thread(() -> {
+            try {
+                while (GAME_STATUS == GAME_STARTED) {
+                    moveTetrominoDown(); // Move the Tetromino down
+                    Thread.sleep(DROP_DELAY); // Wait before the next move
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
-        timer.start(); // Start the timer when the game field is created
+        gameThread.start();
+    }
+
+
+    public synchronized void moveTetrominoDown() {
+        if (GAME_STATUS == GAME_STARTED && canMoveDown(currentTetromino)) {
+            currentTetromino.moveDown();
+            repaint();
+        } else {
+            placeTetromino(); // Place the current Tetromino and spawn a new one
+        }
+    }
+
+
+    // Function to stop the thread when the game is paused or finished
+    public void stopGameThread() {
+        GAME_STATUS = GAME_PAUSED;
+        if (gameThread != null && gameThread.isAlive()) {
+            gameThread.interrupt();
+        }
+    }
+
+    // Function to restart the game thread
+    public void startGameThread() {
+        GAME_STATUS = GAME_STARTED;
+        if (gameThread != null && !gameThread.isAlive()) {
+            gameThread = new Thread(() -> {
+                try {
+                    while (GAME_STATUS == GAME_STARTED) {
+                        moveTetrominoDown();
+                        Thread.sleep(DROP_DELAY);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            gameThread.start();
+        }
     }
 
 
@@ -117,6 +159,7 @@ public class GameField extends JPanel {
         }
     }
 
+
     // Function to move tetromino left
     public void moveTetrominoLeft() {
         if (GAME_STATUS == GAME_STARTED) {
@@ -127,6 +170,7 @@ public class GameField extends JPanel {
         }
     }
 
+
     public void moveTetrominoRight() {
         if (GAME_STATUS == GAME_STARTED) {
             if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
@@ -136,18 +180,6 @@ public class GameField extends JPanel {
         }
     }
 
-
-    public void moveTetrominoDown() {
-        if (GAME_STATUS == GAME_STARTED) {
-            if (canMoveDown(currentTetromino)) {
-                currentTetromino.moveDown();
-            } else {
-                // Place the tetromino and generate a new one
-                placeTetromino();
-            }
-            repaint();
-        }
-    }
 
     private boolean canMoveTo(Tetromino tetromino, int newX, int newY) {
         for (Point block : tetromino.getBlocks()) {
@@ -163,35 +195,28 @@ public class GameField extends JPanel {
     }
 
 
-
     // Change status to paused
     private void togglePause() {
         if (GAME_STATUS == GAME_STARTED) {
-            GAME_STATUS = GAME_PAUSED;
-            timer.stop(); // Stop the timer when the game is paused
+            stopGameThread(); // Stop the game thread when paused
         } else if (GAME_STATUS == GAME_PAUSED) {
-            GAME_STATUS = GAME_STARTED;
-            timer.start(); // Restart the timer when the game resumes
+            startGameThread(); // Restart the game thread when resumed
         }
-        repaint();
     }
 
+
     private void placeTetromino() {
-        Color tetrominoColor = currentTetromino.getColor();  // Get the color of the current Tetromino
+        Color tetrominoColor = currentTetromino.getColor();
         for (Point block : currentTetromino.getBlocks()) {
             int gridX = currentTetromino.getX() + block.x;
             int gridY = currentTetromino.getY() + block.y;
-
-            // Store the color of the block in the grid
             grid[gridY][gridX] = tetrominoColor;
         }
-
-        // Clear any full rows after placing the Tetromino
-        clearFullRows();
+        clearFullRows(); // Check for and clear full rows
         placedTetrominos.add(currentTetromino);
-        spawnTetromino();
+        spawnTetromino(); // Spawn a new Tetromino after placing the current one
 
-        repaint();  // Repaint the game field after updating the grid
+        repaint();
     }
 
 
@@ -205,6 +230,7 @@ public class GameField extends JPanel {
                     break;
                 }
             }
+
 
             // If the row is full, clear it and shift all rows above down
             if (isRowFull) {
@@ -237,9 +263,6 @@ public class GameField extends JPanel {
         }
     }
 
-
-
-
     // Method to spawn a new Tetromino
     private void spawnTetromino() {
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
@@ -247,16 +270,16 @@ public class GameField extends JPanel {
 
         // Check if the new Tetromino can be placed at the top
         if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
-            gameOver();  // End the game if the new Tetromino cannot be placed
+            gameOver(); // End the game if the new Tetromino cannot be placed
         }
     }
 
     private void gameOver() {
         GAME_STATUS = GAME_FINISHED;
-        timer.stop();  // Stop the game loop
+        stopGameThread(); // Stop the game thread
         JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        // Additional game-over logic, such as restarting or returning to the main menu, can go here
     }
+
 
     private boolean canMoveDown(Tetromino tetromino) {
         for (Point block : tetromino.getBlocks()) {
@@ -302,7 +325,6 @@ public class GameField extends JPanel {
             showPaused(g);
         }
     }
-
 
 
     // Displays pause text when game is paused

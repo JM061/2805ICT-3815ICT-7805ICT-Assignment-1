@@ -31,13 +31,14 @@ public class GameDisplay extends JPanel {
         JPanel buttonPanel = new JPanel();
         JPanel GamePanel = new JPanel();
         Box GameBox = Box.createVerticalBox();
+
         //code to create button
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> app.showScreen("Home"));
         backButton.setBackground(Color.WHITE);
         backButton.setPreferredSize(new Dimension(100, 50));
         backButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        backButton.addActionListener(new ActionListener() {
+        backButton.addActionListener(new ActionListener() {C
             @Override
             public void actionPerformed(ActionEvent e) {
                 int response = JOptionPane.showConfirmDialog(app.getFrame(),
