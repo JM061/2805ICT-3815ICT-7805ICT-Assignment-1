@@ -59,6 +59,9 @@ public class TetrisApp {
        if (screenName.equals("HighScores")) {
            highScoreScreen.refreshScores();//refreshes scores when page is loaded
        }
+       if(screenName.equals("GameDisplay")) {
+           gameDisplay.onShow();
+       }
     }
 
     public static void main(String[] args) {

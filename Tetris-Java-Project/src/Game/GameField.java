@@ -47,6 +47,8 @@ public class GameField extends JPanel {
         // Generates the first tetromino on page load
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
         currentTetromino = new Tetromino(randomShape, cols / 2, 0);
+
+
         gameStart();
         if(GAME_STATUS == GAME_STARTED) {
             timer = new Timer(DROP_DELAY, new ActionListener() {
@@ -283,24 +285,44 @@ public class GameField extends JPanel {
     private void gameOver() {
         GAME_STATUS = GAME_FINISHED;
         timer.stop();  // Stop the game loop
+        System.out.println("Current Game Status: "+GAME_STATUS);
         JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         userScoreEntry();
         clearGrid();   // Clear the entire grid
     }
 
     private boolean isScoreInTopTen(int score) {
-        List<UserScore> topScores = ScoreHandler.loadTopScores();
-        return topScores.size() < 10 || score > topScores.get(topScores.size() - 1).score;
+
+        if(score != 0) {
+            List<UserScore> topScores = ScoreHandler.loadTopScores();
+            return topScores.size() < 10 || score > topScores.get(topScores.size() - 1).score;
+        } else {
+            return false;
+
+        }
     }
 
 
-    private void userScoreEntry(){
+    private void userScoreEntry() {
         // Handle end game logic
         if (isScoreInTopTen(score)) {
-            String username = JOptionPane.showInputDialog("Enter your name to save your score:");
-            if (username != null && !username.trim().isEmpty()) {
-                ScoreHandler.addNewScore(username, score);
+            String username = null;
+
+            while (username == null || username.trim().isEmpty()) {
+                try {
+                    username = JOptionPane.showInputDialog("Enter your name to save your score:");
+
+                    if (username == null || username.trim().isEmpty()) {
+                        // Display an error message if the input is invalid
+                        JOptionPane.showMessageDialog(null, "Please enter a valid name.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    // Handle any unexpected exceptions
+                    JOptionPane.showMessageDialog(null, "An error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
+            // After getting a valid username, add the score
+            ScoreHandler.addNewScore(username, score);
         }
     }
 
@@ -324,7 +346,7 @@ public class GameField extends JPanel {
         return true;
     }
 
-    private void clearGrid() {
+    public void clearGrid() {
         // Clear the grid by setting all cells to null
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
