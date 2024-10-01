@@ -1,24 +1,16 @@
 package screens;
 
 import DataHandling.ScoreHandler;
+import DataHandling.UserScore; // Import the UserScore class
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
-
+import java.util.Collections;
 import static Components.ComponentFactory.*;
 
-class UserScore {
-    String username;
-    int score;
-
-    UserScore(String username, int score) {
-        this.username = username;
-        this.score = score;
-    }
-}
 
 public class HighScoreScreen extends JPanel {
     private TetrisApp app;
@@ -80,7 +72,7 @@ public class HighScoreScreen extends JPanel {
             // Display user scores
             Box scoreDisplaysVertical = Box.createVerticalBox();
             for (UserScore userScore : userScores) {
-                scoreDisplaysVertical.add(createUserScoreLabel(userScore.username, userScore.score));
+                scoreDisplaysVertical.add(createUserScoreLabel(userScore.username, userScore.score, userScore.level));
             }
             scoreDisplayPanel.add(scoreDisplaysVertical);
         } else {
@@ -102,15 +94,22 @@ public class HighScoreScreen extends JPanel {
 
         // Parse and add scores to the list
         for (String username : scores.keySet()) {
-            JsonElement scoreElement = scores.get(username);
-            if (scoreElement != null && scoreElement.isJsonPrimitive()) {
-                int score = scoreElement.getAsInt();
-                userScores.add(new UserScore(username, score));
+            JsonElement userScoreElement = scores.get(username);
+
+            // Make sure the userScoreElement is a JsonObject
+            if (userScoreElement != null && userScoreElement.isJsonObject()) {
+                JsonObject userScoreObject = userScoreElement.getAsJsonObject();
+
+                // Extract score and level
+                int score = userScoreObject.get("score").getAsInt();
+                int level = userScoreObject.get("level").getAsInt();
+
+                userScores.add(new UserScore(username, score, level));
             }
         }
 
-        // Sort the list by score in descending order
-        userScores.sort((u1, u2) -> Integer.compare(u2.score, u1.score));
+        // Sort the list using the compareTo method defined in UserScore (sorts by score)
+        Collections.sort(userScores);
 
         return userScores;
     }

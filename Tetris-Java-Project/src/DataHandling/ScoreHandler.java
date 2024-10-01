@@ -53,7 +53,12 @@ public class ScoreHandler{
     public static void saveTopScores(List<UserScore> topScores) {
         JsonObject scores = new JsonObject();
         for (UserScore userScore : topScores) {
-            scores.addProperty(userScore.username, userScore.score);
+            // Create a JsonObject to store both score and level
+            JsonObject scoreDetails = new JsonObject();
+            scoreDetails.addProperty("score", userScore.score);
+            scoreDetails.addProperty("level", userScore.level);
+
+            scores.add(userScore.username, scoreDetails);  // Add it to the main JsonObject
         }
 
         try (FileWriter writer = new FileWriter(SCORE_FILE)) {
@@ -70,21 +75,25 @@ public class ScoreHandler{
 
         for (String username : scores.keySet()) {
             JsonElement scoreElement = scores.get(username);
-            if (scoreElement != null && scoreElement.isJsonPrimitive()) {
-                int score = scoreElement.getAsInt();
-                userScores.add(new UserScore(username, score));
+            if (scoreElement != null && scoreElement.isJsonObject()) {
+                JsonObject scoreDetails = scoreElement.getAsJsonObject();
+                int score = scoreDetails.get("score").getAsInt();
+                int level = scoreDetails.get("level").getAsInt(); // Retrieve the level
+
+                userScores.add(new UserScore(username, score, level));
             }
         }
 
-        Collections.sort(userScores, (a, b) -> Integer.compare(b.score, a.score));
+        Collections.sort(userScores);  // Sorts in descending order by score and level
+
         return userScores;
     }
 
-    public static void addNewScore(String username, int score) {
+    public static void addNewScore(String username, int score, int level) {
         List<UserScore> topScores = loadTopScores();
-        topScores.add(new UserScore(username, score));
+        topScores.add(new UserScore(username, score, level));
 
-        Collections.sort(topScores, (a, b) -> Integer.compare(b.score, a.score));
+        Collections.sort(topScores);  // Sorts in descending order by score and level
 
         if (topScores.size() > 10) {
             topScores = topScores.subList(0, 10);
@@ -93,7 +102,7 @@ public class ScoreHandler{
         saveTopScores(topScores);
     }
 
-    public static void removeScores() {
+        public static void removeScores() {
         // Prompt the user for confirmation
         int response = JOptionPane.showConfirmDialog(null,
                 "Are you sure you want to remove all scores?",

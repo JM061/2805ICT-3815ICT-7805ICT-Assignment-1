@@ -353,7 +353,7 @@ public class GameField extends JPanel {
                 }
             }
             // After getting a valid username, add the score
-            ScoreHandler.addNewScore(username, score);
+            ScoreHandler.addNewScore(username, score, level);
         }
     }
 
