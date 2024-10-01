@@ -110,6 +110,18 @@ public class GameField extends JPanel {
                 rotateTetromino();
             }
         });
+        actions.put("toggleMusic", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleMusic();
+            }
+        });
+        actions.put("toggleSound", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleSound();
+            }
+        });
 
         // Bind keys to actions
         inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
@@ -117,12 +129,18 @@ public class GameField extends JPanel {
         inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
         inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
         inputMap.put(KeyStroke.getKeyStroke("UP"), "rotate");
+        inputMap.put(KeyStroke.getKeyStroke("M"), "toggleMusic");
+        inputMap.put(KeyStroke.getKeyStroke("S"), "toggleSound");
+
+
 
         actionMap.put("pause", actions.get("pause"));
         actionMap.put("moveLeft", actions.get("moveLeft"));
         actionMap.put("moveRight", actions.get("moveRight"));
         actionMap.put("moveDown", actions.get("moveDown"));
         actionMap.put("rotate", actions.get("rotate"));
+        actionMap.put("toggleMusic", actions.get("toggleMusic"));
+        actionMap.put("toggleSound", actions.get("toggleSound"));
     }
 
     // Function to rotate the current tetromino
@@ -387,6 +405,14 @@ public class GameField extends JPanel {
         score = 0; // Reset score
         placedTetrominos.clear(); // Clear placed tetrominos
         repaint();  // Repaint the game field to reflect changes
+    }
+
+    //add code here to enable and disable sounds and music
+    public void toggleMusic(){
+        System.out.println("Toggled Music");
+    }
+    public void toggleSound(){
+        System.out.println("Toggled Sound");
     }
 
     @Override
