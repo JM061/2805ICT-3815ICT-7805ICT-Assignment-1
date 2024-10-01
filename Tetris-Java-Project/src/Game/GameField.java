@@ -32,6 +32,8 @@ public class GameField extends JPanel {
     private static final int DROP_DELAY = 500; // delay in milliseconds
 
     private int score = 0; //sets default score of 0
+    private int rowsCleared = 0; // Total rows cleared in the game
+    private int level = 1;
 
     public GameField(int rows, int cols) {
         this.rows = rows;
@@ -221,8 +223,10 @@ public class GameField extends JPanel {
         }
     }
 
-
-    private void clearFullRows() { //clear rows when they are full
+    //checks if rows are full and clears rows if they are
+    //calculates score based on number of rows cleared
+    private void clearFullRows() {
+        int rowsClearedInBatch = 0; // Tracks how many rows are cleared in this iteration
         for (int row = 0; row < rows; row++) {
             boolean isRowFull = true;
             // Check if the row is full
@@ -232,18 +236,45 @@ public class GameField extends JPanel {
                     break;
                 }
             }
-
             // If the row is full, clear it and shift all rows above down
             if (isRowFull) {
                 clearRow(row);
                 shiftRowsDown(row);
-                score += 100;
-                System.out.println("Row Cleared. Current Score is: "+ score);
-                row--;  // Check the same row again after shifting, as it now contains the row above
+                rowsClearedInBatch++;
+                row--;
             }
         }
+        // Use switch case to determine how many rows have been cleared
+        switch (rowsClearedInBatch) {
+            case 1:
+                score += 100;
+                break;
+            case 2:
+                score += 300;
+                break;
+            case 3:
+                score += 600;
+                break;
+            case 4:
+                score += 1000;
+                break;
+        }
+        // Add to total rows cleared
+        rowsCleared += rowsClearedInBatch;
+
+        // Check if the player advances a level (every 10 rows cleared)
+        if (rowsCleared >= level * 10) {
+            levelUp();
+        }
+        // Output score and level information
+        System.out.println("Rows Cleared: " + rowsClearedInBatch + ", Total Score: " + score + ", Level: " + level);
     }
 
+
+    private void levelUp() {
+        level++;
+        System.out.println("Level Up! Now at Level " + level);
+    }
 
     private void clearRow(int row) {
         for (int col = 0; col < cols; col++) {
