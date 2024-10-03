@@ -10,13 +10,18 @@ import java.io.IOException;
 
 public class ConfigHandler {
 
-    public static final String CONFIG_FILE = "configurationSettings.json";
+    public static  String CONFIG_FILE = "configurationSettings.json";
     private static final Gson gson = new Gson();
 
+    public static void setConfigFile(String customConfigFile) {
+        CONFIG_FILE = customConfigFile;
+    }
 
     public static JsonObject loadSettings() {
         File configFile = new File(CONFIG_FILE);
         JsonObject settings;
+        System.out.println("Looking for configuration file at: " + configFile.getAbsolutePath());
+
         // Check if the config file exists, if not create it with default settings
         if (!configFile.exists()) {
             System.out.println("Configuration file not found. Creating new file with default settings.");
@@ -26,7 +31,12 @@ public class ConfigHandler {
             try (FileReader reader = new FileReader(configFile)) {
                 settings = gson.fromJson(reader, JsonObject.class);
             } catch (IOException e) {
-                e.printStackTrace(); // Log the error
+                System.err.println("Failed to read configuration file. Creating default settings.");
+                e.printStackTrace();
+                settings = setDefaultSettings();
+            } catch (Exception e) {
+                System.err.println("An unexpected error occurred.");
+                e.printStackTrace();
                 settings = setDefaultSettings();
             }
         }
@@ -38,8 +48,10 @@ public class ConfigHandler {
     public static void saveSettings(JsonObject settings) {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             gson.toJson(settings, writer);
+            System.out.println("Configuration settings saved successfully.");
         } catch (IOException e) {
-            e.printStackTrace(); // Log the error
+            System.err.println("Failed to save configuration settings.");
+            e.printStackTrace();
         }
     }
 

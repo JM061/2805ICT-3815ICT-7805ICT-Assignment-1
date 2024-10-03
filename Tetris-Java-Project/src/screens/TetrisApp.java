@@ -36,7 +36,7 @@ public class TetrisApp {
             mainPanel = new JPanel(cardLayout);
             // Create the different screens
             JPanel homeScreen = new HomeScreen(this);
-            JPanel configScreen = new ConfigScreen( this, gameSettings);
+            JPanel configScreen = new ConfigScreen(this, gameSettings);
             highScoreScreen = new HighScoreScreen(this);
             gameDisplay = new GameDisplay(this, gameSettings);
 

@@ -13,9 +13,11 @@ import DataHandling.ScoreHandler;
 import DataHandling.ScoreHandler.*;
 import DataHandling.UserScore;
 import com.google.gson.JsonObject;
-
+import screens.GameDisplay.*;
+import screens.GameDisplay;
 
 public class GameField extends JPanel {
+    private List<GameObserver> observers = new ArrayList<>();
     private final Color[][] grid;
     private int rows;
     private int cols;
@@ -27,6 +29,9 @@ public class GameField extends JPanel {
     private final int GAME_FINISHED = 3;
     public int GAME_STATUS = GAME_PRESTART;
 
+    private GameDisplay gameDisplay;
+    private GameInfoDisplay gameInfoDisplay;
+
     private Map<String, Action> actions;
     private Timer timer;
     private static final int DROP_DELAY = 500; // delay in milliseconds
@@ -35,7 +40,9 @@ public class GameField extends JPanel {
     private int rowsCleared = 0; // Total rows cleared in the game
     private int level = 1;
 
-    public GameField(int rows, int cols) {
+    public GameField(int rows, int cols, GameDisplay gameDisplay) {
+
+        this.gameDisplay = gameDisplay;
         this.rows = rows;
         this.cols = cols;
         this.grid = new Color[rows][cols];  // Store colors instead of integers
@@ -65,8 +72,22 @@ public class GameField extends JPanel {
         }
 
     }
+    public void addObserver(GameObserver observer) {
+        observers.add(observer);
+    }
 
+    public void removeObserver(GameObserver observer) {
+        observers.remove(observer);
+    }
 
+    private void notifyObservers() {
+        for (GameObserver observer : observers) {
+            observer.updateScore(score);
+            observer.updateLevel(level);
+            observer.updateRowsCleared(rowsCleared);
+        }
+    }
+    //change status of game when page loads
     public void gameStart(){
         GAME_STATUS = GAME_STARTED;
         System.out.println("GAME STARTED. STATUS:"  + GAME_STATUS);
@@ -179,7 +200,7 @@ public class GameField extends JPanel {
         }
     }
 
-//moves tetromino down
+    //moves tetromino down
     public void moveTetrominoDown() {
         if (GAME_STATUS == GAME_STARTED) {
             if (canMoveDown(currentTetromino)) {
@@ -205,9 +226,6 @@ public class GameField extends JPanel {
             }
             return true;
        }
-
-
-
 
     // Change status to paused
     private void togglePause() {
@@ -243,7 +261,7 @@ public class GameField extends JPanel {
 
     //checks if rows are full and clears rows if they are
     //calculates score based on number of rows cleared
-    private void clearFullRows() {
+    public void clearFullRows() {
         int rowsClearedInBatch = 0; // Tracks how many rows are cleared in this iteration
         for (int row = 0; row < rows; row++) {
             boolean isRowFull = true;
@@ -259,6 +277,9 @@ public class GameField extends JPanel {
                 clearRow(row);
                 shiftRowsDown(row);
                 rowsClearedInBatch++;
+                //increaseScore(score);
+                //setLevel(level);
+                //clearRows(row);
                 row--;
             }
         }
@@ -266,15 +287,19 @@ public class GameField extends JPanel {
         switch (rowsClearedInBatch) {
             case 1:
                 score += 100;
+                notifyObservers();
                 break;
             case 2:
                 score += 300;
+                notifyObservers();
                 break;
             case 3:
                 score += 600;
+                notifyObservers();
                 break;
             case 4:
                 score += 1000;
+                notifyObservers();
                 break;
         }
         // Add to total rows cleared
@@ -289,15 +314,19 @@ public class GameField extends JPanel {
     }
 
 
+    //function to increase level
     private void levelUp() {
         level++;
+        notifyObservers();
         System.out.println("Level Up! Now at Level " + level);
     }
 
+    //clears row
     private void clearRow(int row) {
         for (int col = 0; col < cols; col++) {
             grid[row][col] = null;  // Clear the row by setting all cells to null
         }
+        notifyObservers();
     }
 
     //move rows down when the row is cleared
@@ -316,8 +345,6 @@ public class GameField extends JPanel {
     }
 
 
-
-
     // Method to spawn a new Tetromino
     public void spawnTetromino() {
         if(GAME_STATUS == GAME_STARTED) {
@@ -331,6 +358,7 @@ public class GameField extends JPanel {
         }
     }
 
+    //function that runs when game finishes
     private void gameOver() {
         GAME_STATUS = GAME_FINISHED;
         timer.stop();  // Stop the game loop
@@ -340,8 +368,8 @@ public class GameField extends JPanel {
         clearGrid();   // Clear the entire grid
     }
 
+    //checks if users score is within the top 10 in the Scores File
     private boolean isScoreInTopTen(int score) {
-
         if(score != 0) {
             List<UserScore> topScores = ScoreHandler.loadTopScores();
             return topScores.size() < 10 || score > topScores.get(topScores.size() - 1).score;
@@ -351,12 +379,10 @@ public class GameField extends JPanel {
         }
     }
 
-
+    // Function used to promt user to enter their name if score is within top 10
     private void userScoreEntry() {
-        // Handle end game logic
         if (isScoreInTopTen(score)) {
             String username = null;
-
             while (username == null || username.trim().isEmpty()) {
                 try {
                     username = JOptionPane.showInputDialog("Enter your name to save your score:");
@@ -395,6 +421,7 @@ public class GameField extends JPanel {
         return true;
     }
 
+    //resets playing field
     public void clearGrid() {
         // Clear the grid by setting all cells to null
         for (int row = 0; row < rows; row++) {
@@ -465,4 +492,34 @@ public class GameField extends JPanel {
             }
         }
     }
+
+
+    public int getScore(){
+        System.out.println("current Score is: " + score);
+        return score;
+
+    }
+
+    public int getLevel(){
+        System.out.println("current Level is: " + level);
+        return level;
+    }
+
+    public int getRowsRemoved(){
+        System.out.println("Number of rows cleared:" + rowsCleared);
+        return rowsCleared;
+    }
+
+    public void getupdateGameData(){
+        int score = getScore();
+        int level = getLevel();
+        int rowsCleared = getRowsRemoved();
+        //GameDisplay.updateGameDataDisplay();
+        //GameInfoDisplay.updateGameData(this.level, this.score, 1, this.rowsCleared);
+    }
+
+
+
+
 }
+

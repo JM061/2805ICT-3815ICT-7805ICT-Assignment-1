@@ -43,19 +43,17 @@ public class HomeScreen extends JPanel {
         JButton exitButton = createNavigationbutton("Exit", "Exit", 150, 50, app);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the button
         buttonPanel.add(exitButton);
-        // Add action listener to the exit button to show confirmation dialog
-        exitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showConfirmDialog(app.getFrame(),
-                        "Are you sure you want to exit?",
-                        "Exit Confirmation",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
 
-                if (response == JOptionPane.YES_OPTION) {
-                    System.exit(0); // Exit the application if the user selects "Yes"
-                }
+        // Add action listener to the exit button to show confirmation dialog
+        exitButton.addActionListener(e -> {
+            int response = JOptionPane.showConfirmDialog(app.getFrame(),
+                    "Are you sure you want to exit?",
+                    "Exit Confirmation",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (response == JOptionPane.YES_OPTION) {
+                System.exit(0); // Exit the application if the user selects "Yes"
             }
         });
 
