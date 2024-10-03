@@ -87,7 +87,7 @@ public class ConfigScreen extends JPanel {
         OptionsBox.add(Box.createRigidArea(new Dimension(0, 15)));
         OptionsBox.add(createLabelWithCheckbox("Extend Mode (ON | OFF):", extendedModeCheckbox));
 
-        //add act3ion listener to the event checkbox
+        //add action listener to the event checkbox
         extendedModeCheckbox.addActionListener(e -> checkExtendedModeSelected());
 
         musicCheckbox.addActionListener(e-> checkMusicSelected());
@@ -108,6 +108,15 @@ public class ConfigScreen extends JPanel {
 
 
     }
+
+    // private static class SingletonHolder{
+    //    private static final ConfigScreen INSTANCE = new ConfigScreen(this, this.gameSettings);
+  //  }
+
+   // public static ConfigScreen getInstance(TetrisApp tetrisApp, GameSettings gameSettings) {
+   //     return SingletonHolder.INSTANCE;
+   // }
+
 
 
 

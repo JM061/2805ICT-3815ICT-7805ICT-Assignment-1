@@ -11,7 +11,20 @@ public class UserScore implements Comparable<UserScore> {
         this.level = level;
     }
 
-    // Implement the compareTo method to sort by score in descending order
+
+    public String getUsername() {
+        return username; // Optional: Add a getter for username if needed
+    }
+
+    public int getScore() {
+        return score; // This method should exist
+    }
+
+    public int getLevel() {
+        return level; // This method should exist
+    }
+
+
     @Override
     public int compareTo(UserScore other) {
         return Integer.compare(other.score, this.score); // Descending order

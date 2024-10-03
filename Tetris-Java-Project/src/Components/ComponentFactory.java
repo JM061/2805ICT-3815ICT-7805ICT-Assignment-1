@@ -38,11 +38,6 @@ public class ComponentFactory {
     }
 
 
-
-
-
-
-
     //creates checkbox with label for config page
     //requires text for the title of label
     public static JPanel createLabelWithCheckbox(String text, JCheckBox checkbox) {
@@ -69,12 +64,20 @@ public class ComponentFactory {
     }
 
     //used to create the labels for the high score screen
-    public static JPanel createUserScoreLabel(String Username, int Score){
-        JPanel usersScorePanel = new JPanel(new BorderLayout(60, 20));
-        JLabel userLabel = createLabel(Username);
-        JLabel scoreLabel = createLabel(String.valueOf(Score));
-        usersScorePanel.add(userLabel, BorderLayout.WEST);
-        usersScorePanel.add(scoreLabel, BorderLayout.EAST);
+    public static JPanel createUserScoreLabel(String username, int score, int level) {
+        // Main panel using GridLayout with 1 row and 3 columns
+        JPanel usersScorePanel = new JPanel(new GridLayout(1, 3));
+
+        // Create labels for username, score, and level
+        JLabel userLabel = createLabel(username);
+        JLabel scoreLabel = createLabel("Score: " + score);
+        JLabel levelLabel = createLabel("Level: " + level);
+
+        // Add all labels to the panel
+        usersScorePanel.add(userLabel);
+        usersScorePanel.add(scoreLabel);
+        usersScorePanel.add(levelLabel);
+
         return usersScorePanel;
     }
 }

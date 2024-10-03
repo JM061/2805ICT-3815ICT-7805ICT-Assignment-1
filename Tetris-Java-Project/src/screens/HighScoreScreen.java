@@ -63,7 +63,7 @@ public class HighScoreScreen extends JPanel {
 
 
     // Load user scores and update the score display
-    private void displayScores() {
+    public void displayScores() {
         List<UserScore> userScores = loadUserScores();
 
         // Clear previous content in the score display panel
@@ -82,13 +82,12 @@ public class HighScoreScreen extends JPanel {
             noScoresLabel.setHorizontalAlignment(SwingConstants.CENTER);
             scoreDisplayPanel.add(noScoresLabel, BorderLayout.CENTER);
         }
-
         // Refresh the panel
         scoreDisplayPanel.repaint();
     }
 
     // Load scores from ScoreHandler
-    private List<UserScore> loadUserScores() {
+    public List<UserScore> loadUserScores() {
         List<UserScore> userScores = new ArrayList<>();
         JsonObject scores = ScoreHandler.loadScores();
 

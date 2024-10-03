@@ -16,6 +16,9 @@ public class GameDisplay extends JPanel {
     public int panelHeight;
     private GameField gameField;
     private JPanel gamePanel;
+    private GameInfoDisplay gameInfoDisplay;
+    //private GameInfoDisplay gameInfoDisplay2;
+
 
 
     public GameDisplay(TetrisApp app, GameSettings settings) {
@@ -48,39 +51,43 @@ public class GameDisplay extends JPanel {
             }
         });
 
-
-
-        //gameField.clearGrid();// Clear the entire grid
-        //gameField.gameStart();
-
-
-        //GameField gameField = new GameField(fieldWidth, fieldHeight); // 20 rows and 10 columns
-        //GameField gameField2 = new GameField(20, 10); // generate second play screen
-
-        //GamePanel.add(gameField2);
-
         //Adding buttons to buttonPanel
         buttonPanel.add(backButton);
 
         //Set location of button panel
-
         add(titleLabel, BorderLayout.PAGE_START);
         add(gamePanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.PAGE_END);
     }
 
+
+
     public void resetGame(){
+
         int fieldWidth  = gameSettings.getFieldWidth();
         int fieldHeight = gameSettings.getFieldHeight();
         gamePanel.removeAll();
 
-        GameField gameField = new GameField(fieldHeight, fieldWidth);
+        gameField = new GameField(fieldHeight, fieldWidth, this);
+        gameInfoDisplay = new GameInfoDisplay(1, 0, 1, 0);
+
+        gameField.addObserver(gameInfoDisplay);
+        //need to add
+        //adds second game field need to add controls for second field
+        //GameField gameField2 = new GameField(fieldHeight, fieldWidth);
+        //GameInfoDisplay gameInfoDisplay2= new GameInfoDisplay();
+        //gameField2.clearGrid();
+        //gameField2.gameStart();
 
 
         gameField.clearGrid();
         gameField.gameStart();
-
         gamePanel.add(gameField);
+        gamePanel.add(gameInfoDisplay);
+
+        //gamePanel.add(gameField2);
+        //gamePanel.add(gameInfoDisplay2);
+
         gamePanel.revalidate();
         gamePanel.repaint();
     }
@@ -88,9 +95,4 @@ public class GameDisplay extends JPanel {
     public void onShow(){
         resetGame();
     }
-
-
-
-
-
-}
+    }
