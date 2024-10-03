@@ -10,13 +10,13 @@ import java.util.Map;
 import java.util.List;
 
 import DataHandling.ScoreHandler;
-import DataHandling.ScoreHandler.*;
 import DataHandling.UserScore;
-import com.google.gson.JsonObject;
-import screens.GameDisplay.*;
+import Sounds.SoundHandler;
 import screens.GameDisplay;
 
+
 public class GameField extends JPanel {
+    static SoundHandler soundManager;
     private List<GameObserver> observers = new ArrayList<>();
     private final Color[][] grid;
     private int rows;
@@ -40,8 +40,11 @@ public class GameField extends JPanel {
     private int rowsCleared = 0; // Total rows cleared in the game
     private int level = 1;
 
-    public GameField(int rows, int cols, GameDisplay gameDisplay) {
 
+
+
+
+    public GameField(int rows, int cols, GameDisplay gameDisplay) {
         this.gameDisplay = gameDisplay;
         this.rows = rows;
         this.cols = cols;
@@ -57,6 +60,13 @@ public class GameField extends JPanel {
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
         currentTetromino = new Tetromino(randomShape, cols / 2, 0);
 
+        String[] soundFiles = {
+                "Sounds/clear_row_sound.wav",
+                "Sounds/game_over_sound.wav",
+                "Sounds/level_up_sound.wav",
+                "Sounds/place_tetromino.wav"
+        };
+        soundManager = new SoundHandler(soundFiles);
 
         gameStart();
         if(GAME_STATUS == GAME_STARTED) {
@@ -254,7 +264,7 @@ public class GameField extends JPanel {
             clearFullRows();
             placedTetrominos.add(currentTetromino);
             spawnTetromino();
-
+            soundManager.playSoundEffect("Sounds/place_tetromino.wav");
             repaint();  // Repaint the game field after updating the grid
         }
     }
@@ -262,6 +272,7 @@ public class GameField extends JPanel {
     //checks if rows are full and clears rows if they are
     //calculates score based on number of rows cleared
     public void clearFullRows() {
+        int scoreIncrement = 0;
         int rowsClearedInBatch = 0; // Tracks how many rows are cleared in this iteration
         for (int row = 0; row < rows; row++) {
             boolean isRowFull = true;
@@ -277,30 +288,30 @@ public class GameField extends JPanel {
                 clearRow(row);
                 shiftRowsDown(row);
                 rowsClearedInBatch++;
-                //increaseScore(score);
-                //setLevel(level);
-                //clearRows(row);
                 row--;
             }
         }
         // Use switch case to determine how many rows have been cleared
         switch (rowsClearedInBatch) {
             case 1:
-                score += 100;
-                notifyObservers();
+                scoreIncrement += 100;
                 break;
             case 2:
-                score += 300;
-                notifyObservers();
+                scoreIncrement += 300;
                 break;
             case 3:
-                score += 600;
-                notifyObservers();
+                scoreIncrement += 600;
                 break;
             case 4:
-                score += 1000;
-                notifyObservers();
+                scoreIncrement += 1000;
                 break;
+
+
+        }
+        if(scoreIncrement >0){
+            score += scoreIncrement;
+            soundManager.playSoundEffect("Sounds/clear_row_sound.wav");
+            notifyObservers();
         }
         // Add to total rows cleared
         rowsCleared += rowsClearedInBatch;
@@ -318,6 +329,7 @@ public class GameField extends JPanel {
     private void levelUp() {
         level++;
         notifyObservers();
+        soundManager.playSoundEffect("Sounds/level_up_sound.wav");
         System.out.println("Level Up! Now at Level " + level);
     }
 
@@ -363,6 +375,7 @@ public class GameField extends JPanel {
         GAME_STATUS = GAME_FINISHED;
         timer.stop();  // Stop the game loop
         System.out.println("Current Game Status: "+GAME_STATUS);
+        soundManager.playSoundEffect("Sounds/game_over_sound.wav");
         JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         userScoreEntry();
         clearGrid();   // Clear the entire grid
