@@ -8,23 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import Game.GameObserver;
 import Game.Tetromino;
-import DataHandling.ConfigHandler;
-import DataHandling.ScoreHandler;
-import DataHandling.UserScore;
-import Sounds.SoundHandler;
-
 import screens.GameDisplay;
-import Sounds.bgMusicPlayer;
 
 public class GameField extends JPanel {
-    static SoundHandler soundManager;
-    private bgMusicPlayer musicPlayer;
-    private Thread musicThread;
-
-
     private List<GameObserver> observers = new ArrayList<>();
     private final Color[][] grid;
     private int rows;
@@ -43,13 +31,10 @@ public class GameField extends JPanel {
     private int rowsCleared = 0;
     private int level = 1;
 
-
     // Declare and initialize actions map
     private Map<String, Action> actions = new HashMap<>();
+
     public GameField(int rows, int cols, GameDisplay gameDisplay, boolean isPlayerOne) {
-      
-    public GameField(int rows, int cols, GameDisplay gameDisplay) {
-        this.gameDisplay = gameDisplay;
         this.rows = rows;
         this.cols = cols;
         this.grid = new Color[rows][cols];  // Store colors instead of integers
@@ -67,57 +52,9 @@ public class GameField extends JPanel {
         gameStart();
         if (GAME_STATUS == GAME_STARTED) {
             timer = new Timer(DROP_DELAY, e -> moveTetrominoDown());
-        //initialise music player (Singleton Instance)
-        musicPlayer = bgMusicPlayer.getInstance("/Sounds/backgroundMusic.mp3"); // Get the singleton instance
-        startMusic();
-
-        String[] soundFiles = {
-                "Sounds/clear_row_sound.wav",
-                "Sounds/game_over_sound.wav",
-                "Sounds/level_up_sound.wav",
-                "Sounds/place_tetromino.wav"
-        };
-        soundManager = SoundHandler.getInstance(soundFiles);
-
-        gameStart();
-        if(GAME_STATUS == GAME_STARTED) {
-            timer = new Timer(DROP_DELAY, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    moveTetrominoDown();
-                }
-            });
             timer.start(); // Start the timer when the game field is created
         }
     }
-
-
-    //method to start music when page loads
-    public void startMusic() {
-        if (musicThread == null || !musicThread.isAlive()) {
-            musicThread = new Thread(musicPlayer); // Create a new Thread
-            if(ConfigHandler.getMusicStatus()){ //checks config file to start music
-                musicThread.start(); // Start the thread
-                System.out.println(ConfigHandler.getMusicStatus() + "MUSIC STARTED FROM CONFIG");
-            } else{
-                System.out.println(ConfigHandler.getMusicStatus() + "MUSIC NOT STARTED FROM CONFIG");
-            }
-           System.out.println("Music thread started.");
-        } else {
-            System.out.println("Music thread is already running.");
-        }
-    }
-
-    public void stopMusic(){
-        if (musicThread != null && musicThread.isAlive()) {
-            try {
-                musicThread.join(); // Wait for the music thread to finish
-            } catch (InterruptedException e) {
-                System.out.println("Error while stopping the music thread: " + e.getMessage());
-            }
-        }
-    }
-
 
     public void addObserver(GameObserver observer) {
         observers.add(observer);
@@ -127,7 +64,6 @@ public class GameField extends JPanel {
         observers.remove(observer);
     }
 
-    //update score level and rows cleared in observer for data display
     private void notifyObservers() {
         for (GameObserver observer : observers) {
             observer.updateScore(score);
@@ -309,18 +245,12 @@ public class GameField extends JPanel {
             clearFullRows();
             placedTetrominos.add(currentTetromino);
             spawnTetromino();
-
             repaint();
-            soundManager.playSoundEffect("Sounds/place_tetromino.wav");
-            repaint();  // Repaint the g
-            // ame field after updating the grid
         }
     }
 
     public void clearFullRows() {
         int rowsClearedInBatch = 0;
-        int scoreIncrement = 0;
-        int rowsClearedInBatch = 0; // Tracks how many rows are cleared in this iteration
         for (int row = 0; row < rows; row++) {
             boolean isRowFull = true;
             for (int col = 0; col < cols; col++) {
@@ -342,24 +272,7 @@ public class GameField extends JPanel {
             case 2 -> score += 300;
             case 3 -> score += 600;
             case 4 -> score += 1000;
-            case 1:
-                scoreIncrement += 100;
-                break;
-            case 2:
-                scoreIncrement += 300;
-                break;
-            case 3:
-                scoreIncrement += 600;
-                break;
-            case 4:
-                scoreIncrement += 1000;
-                break;
         }
-        if(scoreIncrement >0){
-            score += scoreIncrement;
-            soundManager.playSoundEffect("Sounds/clear_row_sound.wav");
-            notifyObservers();        
-}
 
         rowsCleared += rowsClearedInBatch;
         if (rowsCleared >= level * 10) {
@@ -371,8 +284,6 @@ public class GameField extends JPanel {
     private void levelUp() {
         level++;
         notifyObservers();
-        soundManager.playSoundEffect("Sounds/level_up_sound.wav");
-        System.out.println("Level Up! Now at Level " + level);
     }
 
     private void clearRow(int row) {
@@ -392,7 +303,6 @@ public class GameField extends JPanel {
         }
     }
 
-
     // Method to spawn a new tetromino at the top of the grid
     private void spawnTetromino() {
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
@@ -401,64 +311,6 @@ public class GameField extends JPanel {
             GAME_STATUS = GAME_FINISHED;
             System.out.println("GAME OVER. FINAL SCORE: " + score);
             timer.stop();
-
-
-    // Method to spawn a new Tetromino
-    public void spawnTetromino() {
-        if(GAME_STATUS == GAME_STARTED) {
-            TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
-            currentTetromino = new Tetromino(randomShape, cols / 2, 0);
-
-            // Check if the new Tetromino can be placed at the top
-            if (!canMoveTo(currentTetromino, currentTetromino.getX(), currentTetromino.getY())) {
-                gameOver();  // End the game if the new Tetromino cannot be placed
-            }
-        }
-    }
-
-    //function that runs when game finishes
-    private void gameOver() {
-        GAME_STATUS = GAME_FINISHED;
-        timer.stop();  // Stop the game loop
-        System.out.println("Current Game Status: "+GAME_STATUS);
-        soundManager.playSoundEffect("Sounds/game_over_sound.wav");
-        JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        userScoreEntry();
-        musicPlayer.stop(); // Stop the music
-        stopMusic();
-        clearGrid();   // Clear the entire grid
-    }
-
-    //checks if users score is within the top 10 in the Scores File
-    private boolean isScoreInTopTen(int score) {
-        if(score != 0) {
-            List<UserScore> topScores = ScoreHandler.loadTopScores();
-            return topScores.size() < 10 || score > topScores.get(topScores.size() - 1).score;
-        } else {
-            return false;
-
-        }
-    }
-
-    // Function used to promt user to enter their name if score is within top 10
-    private void userScoreEntry() {
-        if (isScoreInTopTen(score)) {
-            String username = null;
-            while (username == null || username.trim().isEmpty()) {
-                try {
-                    username = JOptionPane.showInputDialog("Enter your name to save your score:");
-
-                    if (username == null || username.trim().isEmpty()) {
-                        // Display an error message if the input is invalid
-                        JOptionPane.showMessageDialog(null, "Please enter a valid name.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (Exception e) {
-                    // Handle any unexpected exceptions
-                    JOptionPane.showMessageDialog(null, "An error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            // After getting a valid username, add the score
-            ScoreHandler.addNewScore(username, score, level);
         }
     }
 
@@ -477,29 +329,6 @@ public class GameField extends JPanel {
                 g.drawRect(col * 25, row * 25, 25, 25);
             }
         }
-
-        score = 0; // Reset score
-        placedTetrominos.clear(); // Clear placed tetrominos
-        repaint();  // Repaint the game field to reflect changes
-    }
-
-    //add code here to enable and disable sounds and music
-    public void toggleMusic(){
-        System.out.println("Toggled Music");
-        if (musicPlayer.isPaused()) {
-            musicPlayer.resume();
-        } else {
-            musicPlayer.pause();
-        }
-    }
-    public void toggleSound() {
-        soundManager.toggleSound();
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        generateCells(g);
 
         // Draw placed Tetrominos
         for (int row = 0; row < rows; row++) {
