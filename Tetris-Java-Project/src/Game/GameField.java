@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
+import DataHandling.ConfigHandler;
 import DataHandling.ScoreHandler;
 import DataHandling.UserScore;
 import Sounds.SoundHandler;
@@ -43,9 +44,6 @@ public class GameField extends JPanel {
     private int score = 0; //sets default score of 0
     private int rowsCleared = 0; // Total rows cleared in the game
     private int level = 1;
-
-
-
 
 
     public GameField(int rows, int cols, GameDisplay gameDisplay) {
@@ -85,15 +83,21 @@ public class GameField extends JPanel {
                 }
             });
             timer.start(); // Start the timer when the game field is created
-            //System.out.println("GAME STARTED");
         }
 
     }
+
+    //method to start music when page loads
     public void startMusic() {
         if (musicThread == null || !musicThread.isAlive()) {
             musicThread = new Thread(musicPlayer); // Create a new Thread
-            musicThread.start(); // Start the thread
-            System.out.println("Music thread started.");
+            if(ConfigHandler.getMusicStatus()){ //checks config file to start music
+                musicThread.start(); // Start the thread
+                System.out.println(ConfigHandler.getMusicStatus() + "MUSIC STARTED FROM CONFIG");
+            } else{
+                System.out.println(ConfigHandler.getMusicStatus() + "MUSIC NOT STARTED FROM CONFIG");
+            }
+           System.out.println("Music thread started.");
         } else {
             System.out.println("Music thread is already running.");
         }
