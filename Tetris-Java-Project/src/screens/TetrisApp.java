@@ -9,7 +9,6 @@ import DataHandling.ConfigHandler;
 import com.google.gson.JsonObject;
 import Game.GameField.*;
 
-
 public class TetrisApp {
     public JFrame applicationFrame;
     private JPanel mainPanel;
@@ -72,4 +71,9 @@ public class TetrisApp {
     public JFrame getFrame() {
         return applicationFrame;
     }
+
+
+
+
+
 }
