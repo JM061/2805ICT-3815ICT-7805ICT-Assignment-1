@@ -2,8 +2,6 @@ package screens;
 
 import javax.swing.*;
 import java.awt.*;
-
-import DataHandling.ConfigHandler;
 import Game.*;
 
 public class GameDisplay extends JPanel {
@@ -41,23 +39,19 @@ public class GameDisplay extends JPanel {
         gamePanel.removeAll();
 
         // Player 1
-        gameField1 = new GameField(fieldHeight, fieldWidth, this);
+        gameField1 = new GameField(fieldHeight, fieldWidth, this, true); // Pass true for Player 1
         gameInfoDisplay1 = new GameInfoDisplay(1, 0, 1, 0);
         gameField1.addObserver(gameInfoDisplay1);
 
+        // Player 2
+        gameField2 = new GameField(fieldHeight, fieldWidth, this, false); // Pass false for Player 2
+        gameInfoDisplay2 = new GameInfoDisplay(1, 0, 1, 0);
+        gameField2.addObserver(gameInfoDisplay2);
+
         gamePanel.add(gameField1);
         gamePanel.add(gameInfoDisplay1);
-
-        // Check if two-player mode is enabled
-        if (ConfigHandler.getTwoPlayerMode()) {
-            // Player 2
-            gameField2 = new GameField(fieldHeight, fieldWidth, this);
-            gameInfoDisplay2 = new GameInfoDisplay(1, 0, 1, 0);
-            gameField2.addObserver(gameInfoDisplay2);
-
-            gamePanel.add(gameField2);
-            gamePanel.add(gameInfoDisplay2);
-        }
+        gamePanel.add(gameField2);
+        gamePanel.add(gameInfoDisplay2);
 
         gamePanel.revalidate();
         gamePanel.repaint();

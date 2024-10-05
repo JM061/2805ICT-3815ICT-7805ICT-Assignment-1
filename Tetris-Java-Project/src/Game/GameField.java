@@ -34,7 +34,7 @@ public class GameField extends JPanel {
     // Declare and initialize actions map
     private Map<String, Action> actions = new HashMap<>();
 
-    public GameField(int rows, int cols, GameDisplay gameDisplay) {
+    public GameField(int rows, int cols, GameDisplay gameDisplay, boolean isPlayerOne) {
         this.rows = rows;
         this.cols = cols;
         this.grid = new Color[rows][cols];  // Store colors instead of integers
@@ -43,7 +43,7 @@ public class GameField extends JPanel {
         this.placedTetrominos = new ArrayList<>(); // Ensure it's initialized here
         setFocusable(true);
         requestFocusInWindow(); // Sets focus on window to allow keyboard inputs
-        setupKeyBindings(); // Function to set up key bindings
+        setupKeyBindings(isPlayerOne); // Function to set up key bindings for player 1 or player 2
 
         // Generates the first tetromino on page load
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
@@ -81,57 +81,87 @@ public class GameField extends JPanel {
         }
     }
 
-    // Key binding setup
-    private void setupKeyBindings() {
+    // Key binding setup for Player 1 (Arrows) and Player 2 (WASD)
+    private void setupKeyBindings(boolean isPlayerOne) {
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
 
-        // Define actions for key events
-        actions.put("pause", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                togglePause();
-            }
-        });
+        if (isPlayerOne) {
+            // Player 1: Arrow keys
+            actions.put("moveLeft", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoLeft();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
+            actionMap.put("moveLeft", actions.get("moveLeft"));
 
-        inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
-        actionMap.put("pause", actions.get("pause"));
+            actions.put("moveRight", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoRight();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+            actionMap.put("moveRight", actions.get("moveRight"));
 
-        actions.put("moveLeft", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveTetrominoLeft();
-            }
-        });
-        inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
-        actionMap.put("moveLeft", actions.get("moveLeft"));
+            actions.put("moveDown", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoDown();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
+            actionMap.put("moveDown", actions.get("moveDown"));
 
-        actions.put("moveRight", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveTetrominoRight();
-            }
-        });
-        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
-        actionMap.put("moveRight", actions.get("moveRight"));
+            actions.put("rotate", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    rotateTetromino();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("UP"), "rotate");
+            actionMap.put("rotate", actions.get("rotate"));
 
-        actions.put("moveDown", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveTetrominoDown();
-            }
-        });
-        inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
-        actionMap.put("moveDown", actions.get("moveDown"));
+        } else {
+            // Player 2: WASD keys
+            actions.put("moveLeft", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoLeft();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("A"), "moveLeft");
+            actionMap.put("moveLeft", actions.get("moveLeft"));
 
-        actions.put("rotate", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                rotateTetromino();
-            }
-        });
-        inputMap.put(KeyStroke.getKeyStroke("UP"), "rotate");
-        actionMap.put("rotate", actions.get("rotate"));
+            actions.put("moveRight", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoRight();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("D"), "moveRight");
+            actionMap.put("moveRight", actions.get("moveRight"));
+
+            actions.put("moveDown", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoDown();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("S"), "moveDown");
+            actionMap.put("moveDown", actions.get("moveDown"));
+
+            actions.put("rotate", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    rotateTetromino();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("W"), "rotate");
+            actionMap.put("rotate", actions.get("rotate"));
+        }
     }
 
     // Toggle game pause
