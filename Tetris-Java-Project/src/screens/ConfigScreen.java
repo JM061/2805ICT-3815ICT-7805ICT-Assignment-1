@@ -3,14 +3,10 @@ import Components.ConfigSlider;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
 import static Components.ComponentFactory.*;
-import static Components.ConfigSlider.*;
 
 import DataHandling.ConfigHandler;
 import Game.GameSettings;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class ConfigScreen extends JPanel {
 
@@ -18,6 +14,7 @@ public class ConfigScreen extends JPanel {
     private JCheckBox soundEffectsCheckbox;
     private JCheckBox AIPlayCheckbox;
     private JCheckBox extendedModeCheckbox;
+    private JCheckBox twoPlayerModeCheckbox;
 
     public ConfigScreen(TetrisApp app, GameSettings gameSettings) {
 
@@ -77,6 +74,7 @@ public class ConfigScreen extends JPanel {
         soundEffectsCheckbox = new JCheckBox();
         AIPlayCheckbox = new JCheckBox();
         extendedModeCheckbox = new JCheckBox();
+        twoPlayerModeCheckbox = new JCheckBox();
 
         //add checkboxes with labels
         OptionsBox.add(createLabelWithCheckbox("Music (ON | OFF):", musicCheckbox));
@@ -86,39 +84,25 @@ public class ConfigScreen extends JPanel {
         OptionsBox.add(createLabelWithCheckbox("AI Play (ON | OFF):", AIPlayCheckbox));
         OptionsBox.add(Box.createRigidArea(new Dimension(0, 15)));
         OptionsBox.add(createLabelWithCheckbox("Extend Mode (ON | OFF):", extendedModeCheckbox));
+        OptionsBox.add(Box.createRigidArea(new Dimension(0, 15)));
+        OptionsBox.add(createLabelWithCheckbox("Two Player Mode (ON | OFF):", twoPlayerModeCheckbox));
 
         //add action listener to the event checkbox
         extendedModeCheckbox.addActionListener(e -> checkExtendedModeSelected());
+        twoPlayerModeCheckbox.setSelected(ConfigHandler.getTwoPlayerMode()); // Retrieve saved setting
+
+        twoPlayerModeCheckbox.addActionListener(e -> {
+            ConfigHandler.setTwoPlayerMode(twoPlayerModeCheckbox.isSelected());
+        });
 
         musicCheckbox.addActionListener(e-> checkMusicSelected());
-        //musicCheckbox.
-
         soundEffectsCheckbox.addActionListener(e->checkSoundEffectsSelected());
-
         AIPlayCheckbox.addActionListener(e->checkAIPlaySelected());
-
-
-
 
         //add configOptions to display
         ConfigOptions.add(OptionsBox);
         add(ConfigOptions, BorderLayout.CENTER);
-
-
-
-
     }
-
-    // private static class SingletonHolder{
-    //    private static final ConfigScreen INSTANCE = new ConfigScreen(this, this.gameSettings);
-  //  }
-
-   // public static ConfigScreen getInstance(TetrisApp tetrisApp, GameSettings gameSettings) {
-   //     return SingletonHolder.INSTANCE;
-   // }
-
-
-
 
     // Method to check if extended mode is selected
     public boolean isExtendedModeEnabled() {
@@ -140,16 +124,19 @@ public class ConfigScreen extends JPanel {
         return AIPlayCheckbox.isSelected();
     }
 
+    // Method to check if two-player mode is selected
+    public boolean isTwoPlayerModeEnabled() {
+        return twoPlayerModeCheckbox.isSelected();
+    }
+
     // handle extended mode logic
     public void checkExtendedModeSelected() {
         if (isExtendedModeEnabled()) {
             System.out.println("Extended Mode is enabled");
             ConfigHandler.setExtendedMode(isExtendedModeEnabled());
-            // Perform actions related to Extended Mode
         } else {
             System.out.println("Extended Mode is disabled");
             ConfigHandler.setExtendedMode(isExtendedModeEnabled());
-            // Handle Extended Mode being disabled
         }
     }
 
@@ -157,24 +144,22 @@ public class ConfigScreen extends JPanel {
         if (isMusicOn()) {
             System.out.println("Music is on");
             ConfigHandler.setMusic(isMusicOn());
-        } else{
+        } else {
             System.out.println("Music is off");
             ConfigHandler.setMusic(isMusicOn());
-
         }
     }
 
     public void checkSoundEffectsSelected(){
         if (isSoundEffectsOn()) {
-            System.out.println("Sound Effects is on");
+            System.out.println("Sound Effects are on");
             ConfigHandler.setSoundEffects(isSoundEffectsOn());
         } else {
-            System.out.println("Sound Effects is disabled");
+            System.out.println("Sound Effects are off");
             ConfigHandler.setSoundEffects(isSoundEffectsOn());
-
         }
-
     }
+
     public void checkAIPlaySelected(){
         if (isAIPlayEnabled()) {
             System.out.println("AI Play is on");
@@ -182,6 +167,4 @@ public class ConfigScreen extends JPanel {
             System.out.println("AI Play is off");
         }
     }
-
 }
-
