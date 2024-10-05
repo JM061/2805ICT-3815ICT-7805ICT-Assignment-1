@@ -13,10 +13,14 @@ import DataHandling.ScoreHandler;
 import DataHandling.UserScore;
 import Sounds.SoundHandler;
 import screens.GameDisplay;
-
+import Sounds.bgMusicPlayer;
 
 public class GameField extends JPanel {
     static SoundHandler soundManager;
+    private bgMusicPlayer musicPlayer;
+    private Thread musicThread;
+
+
     private List<GameObserver> observers = new ArrayList<>();
     private final Color[][] grid;
     private int rows;
@@ -60,13 +64,17 @@ public class GameField extends JPanel {
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
         currentTetromino = new Tetromino(randomShape, cols / 2, 0);
 
+        //initialise music player (Singleton Instance)
+        musicPlayer = bgMusicPlayer.getInstance("/Sounds/backgroundMusic.mp3"); // Get the singleton instance
+        startMusic();
+
         String[] soundFiles = {
                 "Sounds/clear_row_sound.wav",
                 "Sounds/game_over_sound.wav",
                 "Sounds/level_up_sound.wav",
                 "Sounds/place_tetromino.wav"
         };
-        soundManager = new SoundHandler(soundFiles);
+        soundManager = SoundHandler.getInstance(soundFiles);
 
         gameStart();
         if(GAME_STATUS == GAME_STARTED) {
@@ -74,7 +82,6 @@ public class GameField extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     moveTetrominoDown();
-
                 }
             });
             timer.start(); // Start the timer when the game field is created
@@ -82,6 +89,27 @@ public class GameField extends JPanel {
         }
 
     }
+    public void startMusic() {
+        if (musicThread == null || !musicThread.isAlive()) {
+            musicThread = new Thread(musicPlayer); // Create a new Thread
+            musicThread.start(); // Start the thread
+            System.out.println("Music thread started.");
+        } else {
+            System.out.println("Music thread is already running.");
+        }
+    }
+
+    public void stopMusic(){
+        if (musicThread != null && musicThread.isAlive()) {
+            try {
+                musicThread.join(); // Wait for the music thread to finish
+            } catch (InterruptedException e) {
+                System.out.println("Error while stopping the music thread: " + e.getMessage());
+            }
+        }
+    }
+
+
     public void addObserver(GameObserver observer) {
         observers.add(observer);
     }
@@ -90,6 +118,7 @@ public class GameField extends JPanel {
         observers.remove(observer);
     }
 
+    //update score level and rows cleared in observer for data display
     private void notifyObservers() {
         for (GameObserver observer : observers) {
             observer.updateScore(score);
@@ -265,7 +294,8 @@ public class GameField extends JPanel {
             placedTetrominos.add(currentTetromino);
             spawnTetromino();
             soundManager.playSoundEffect("Sounds/place_tetromino.wav");
-            repaint();  // Repaint the game field after updating the grid
+            repaint();  // Repaint the g
+            // ame field after updating the grid
         }
     }
 
@@ -378,6 +408,8 @@ public class GameField extends JPanel {
         soundManager.playSoundEffect("Sounds/game_over_sound.wav");
         JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         userScoreEntry();
+        musicPlayer.stop(); // Stop the music
+        stopMusic();
         clearGrid();   // Clear the entire grid
     }
 
@@ -450,9 +482,14 @@ public class GameField extends JPanel {
     //add code here to enable and disable sounds and music
     public void toggleMusic(){
         System.out.println("Toggled Music");
+        if (musicPlayer.isPaused()) {
+            musicPlayer.resume();
+        } else {
+            musicPlayer.pause();
+        }
     }
-    public void toggleSound(){
-        System.out.println("Toggled Sound");
+    public void toggleSound() {
+        soundManager.toggleSound();
     }
 
     @Override
