@@ -23,9 +23,6 @@ import DataHandling.UserScore;
 
 
 public class GameField extends JPanel {
-
-
-
     private List<GameObserver> observers = new ArrayList<>();
     private final Color[][] grid;
     private int rows;
@@ -148,7 +145,40 @@ public class GameField extends JPanel {
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
 
+
         if (isPlayerOne) {
+            //toggle music on/off
+            inputMap.put(KeyStroke.getKeyStroke("M"), "toggleMusic");
+            actionMap.put("toggleMusic", actions.get("toggleMusic"));
+            actions.put("toggleMusic", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    toggleMusic();
+                }
+            });
+
+            //toggle sound effects on/off
+            inputMap.put(KeyStroke.getKeyStroke("S"), "toggleSound");
+            actionMap.put("toggleSound", actions.get("toggleSound"));
+            actions.put("toggleSound", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    toggleSound();
+                }
+            });
+
+
+            //pause game
+            inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
+            actionMap.put("pause", actions.get("pause"));
+            actions.put("pause", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    togglePause();
+                }
+            });
+
+
             // Player 1: Arrow keys
             actions.put("moveLeft", new AbstractAction() {
                 @Override
