@@ -27,6 +27,12 @@ public class GameInfoDisplay extends JPanel implements GameObserver {
         gameInfoPanel.revalidate();
     }
 
+    // Method to reset the displayed information for a new game
+    public void resetInfo() {
+        updateLevel(1); // Reset to initial level
+        updateScore(0); // Reset score to 0
+        updateRowsCleared(0); // Reset rows cleared to 0
+    }
 
     @Override
     public void updateScore(int score) {
