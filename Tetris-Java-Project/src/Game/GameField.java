@@ -409,7 +409,7 @@ public class GameField extends JPanel {
 
     //function to increase level
     private void levelUp() {
-        level++;
+        this.level++;
         notifyObservers();
         soundManager.playSoundEffect("Sounds/level_up_sound.wav");
         System.out.println("Level Up! Now at Level " + level);
