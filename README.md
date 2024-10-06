@@ -37,7 +37,7 @@ GitHub Repo for Software Engineering Project.
   - [x] Add user scores to end of file
   - [x] edit the config file when user changes the config
   - [x] Sort high scores when displaying on high score page
-- [ ] Music and Sound Effects
+- [x] Music and Sound Effects
 - [ ] Extended Mode
   - [ ]  AI Play
   - [ ]  Secondary Player
@@ -54,8 +54,8 @@ GitHub Repo for Software Engineering Project.
   - [ ] Implementation Style View
   - [ ] Deployment Style View
 - [ ] Design Patterns
-  - [ ]  Singleton Design Patterns
-  - [ ]  Factory Design Pattern
+  - [x]  Singleton Design Patterns
+  - [x]  Factory Design Pattern
   - [ ]  Facade Design Pattern
 - [ ]  Good Programing Practices
   - [x] Sorting
