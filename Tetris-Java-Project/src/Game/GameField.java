@@ -123,7 +123,7 @@ public class GameField extends JPanel {
     }
 
     //update score level and rows cleared in observer for data display
-    private void notifyObservers() {
+    public void notifyObservers() {
         for (GameObserver observer : observers) {
             observer.updateScore(score);
             observer.updateLevel(level);
@@ -271,7 +271,7 @@ public class GameField extends JPanel {
        }
 
     // Change status to paused
-    private void togglePause() {
+    public void togglePause() {
         if (GAME_STATUS == GAME_STARTED) {
             GAME_STATUS = GAME_PAUSED;
             timer.stop(); // Stop the timer when the game is paused
@@ -405,7 +405,7 @@ public class GameField extends JPanel {
     }
 
     //function that runs when game finishes
-    private void gameOver() {
+    public void gameOver() {
         GAME_STATUS = GAME_FINISHED;
         timer.stop();  // Stop the game loop
         System.out.println("Current Game Status: "+GAME_STATUS);
@@ -429,7 +429,7 @@ public class GameField extends JPanel {
     }
 
     // Function used to promt user to enter their name if score is within top 10
-    private void userScoreEntry() {
+    public void userScoreEntry() {
         if (isScoreInTopTen(score)) {
             String username = null;
             while (username == null || username.trim().isEmpty()) {
