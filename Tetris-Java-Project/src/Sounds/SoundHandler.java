@@ -7,25 +7,36 @@ import java.util.Map;
 
 public class SoundHandler {
     private Map<String, Clip> soundEffects;
-    public boolean isMuted;
-    // Singleton instance
+    private boolean isMuted;
+
+    // Volatile keyword ensures visibility across threads
     private static volatile SoundHandler instance = null;
+    private static String[] soundFilesConfig;
 
     // Private constructor to prevent external instantiation
-    private SoundHandler(String[] soundFiles) {
+    private SoundHandler() {
         soundEffects = new HashMap<>();
-        loadSoundEffects(soundFiles);
-    }
-
-    // Singleton method to get the instance
-    public static synchronized SoundHandler getInstance(String[] soundFiles) {
-        if (instance == null) {
-            instance = new SoundHandler(soundFiles);
+        if (soundFilesConfig != null) {
+            loadSoundEffects(soundFilesConfig);
         }
-        return instance;
     }
 
-    // Load sound effects from provided sound files
+    // Thread-safe getInstance using double-checked locking
+    public static SoundHandler getInstance(String[] soundFiles) {
+        SoundHandler result = instance;
+        if (result == null) {
+            synchronized (SoundHandler.class) {
+                result = instance;
+                if (result == null) {
+                    soundFilesConfig = soundFiles;
+                    instance = result = new SoundHandler();
+                }
+            }
+        }
+        return result;
+    }
+
+
     private void loadSoundEffects(String[] soundFiles) {
         for (String filePath : soundFiles) {
             try {
@@ -43,14 +54,13 @@ public class SoundHandler {
         }
     }
 
-    // Plays sound effect when the function is called
     public void playSoundEffect(final String soundName) {
         if (!isMuted) {
             Clip clip = soundEffects.get(soundName);
             if (clip != null) {
                 new Thread(() -> {
-                    clip.setFramePosition(0); // Rewind to the beginning
-                    clip.start(); // Start playing the clip
+                    clip.setFramePosition(0);
+                    clip.start();
                 }).start();
             } else {
                 System.err.println("Sound effect not found: " + soundName);
@@ -58,7 +68,6 @@ public class SoundHandler {
         }
     }
 
-    // Close all clips
     public void close() {
         for (Clip clip : soundEffects.values()) {
             clip.close();
@@ -66,7 +75,7 @@ public class SoundHandler {
     }
 
     public void toggleSound() {
-        isMuted = !isMuted; // Toggle the mute state
+        isMuted = !isMuted;
         if (isMuted) {
             System.out.println("Sound muted.");
         } else {
