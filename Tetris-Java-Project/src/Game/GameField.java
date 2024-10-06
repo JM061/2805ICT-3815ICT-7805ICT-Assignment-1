@@ -365,6 +365,33 @@ public class GameField extends JPanel {
         notifyObservers();
         soundManager.playSoundEffect("Sounds/level_up_sound.wav");
         System.out.println("Level Up! Now at Level " + level);
+        updateDropDelay(); // Update the drop delay when leveling up
+
+    }
+
+
+    private int getDropDelay() {
+        // Calculate drop delay based on the level
+        return Math.max(100, DROP_DELAY - (level * 50));
+    }
+
+
+    private void updateDropDelay() {
+        // Stop the current timer
+        timer.stop();
+
+        // Get the new drop delay based on the current level
+        int newDropDelay = getDropDelay();
+        System.out.println("Drop Delay: " + newDropDelay);
+        // Create a new timer with the updated delay
+        timer = new Timer(newDropDelay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moveTetrominoDown(); // Call your method to move tetromino down
+            }
+        });
+
+        timer.start(); // Restart the timer with the new delay
     }
 
     //clears row
