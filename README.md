@@ -45,21 +45,21 @@ GitHub Repo for Software Engineering Project.
   - [ ]  Connection to TetrisServer Provided
 
 ## Drawings / Diagrams
-- [ ] MVC Architectural Design Patterns
-  - [ ] Description of MVC
-  - [ ] Class Diagram
-  - [ ] Code Screenshot
-  - [ ] Alignment
+- [ X] MVC Architectural Design Patterns
+  - [X ] Description of MVC
+  - [ X] Class Diagram
+  - [X ] Code Screenshot
+  - [ X] Alignment
 - [ ] Allocation Diagrams
   - [ ] Implementation Style View
   - [ ] Deployment Style View
 - [ ] Design Patterns
-  - [ ]  Singleton Design Patterns
-  - [ ]  Factory Design Pattern
-  - [ ]  Facade Design Pattern
+  - [X ]  Singleton Design Patterns
+  - [X ]  Factory Design Pattern
+  - [X ]  Facade Design Pattern
 - [ ]  Good Programing Practices
   - [x] Sorting
   - [x] Lambda Expressions
-  - [ ] Multiple Threads
+  - [X ] Multiple Threads
   - [x] Exception and Argument Validation Handling
   - [ ] Testing
