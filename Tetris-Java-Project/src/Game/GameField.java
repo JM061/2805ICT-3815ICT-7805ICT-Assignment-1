@@ -23,6 +23,8 @@ import DataHandling.UserScore;
 
 
 public class GameField extends JPanel {
+    private GameDisplay gameDisplay;
+    private boolean isPlayerOne;
     private List<GameObserver> observers = new ArrayList<>();
     private final Color[][] grid;
     private int rows;
@@ -57,6 +59,8 @@ public class GameField extends JPanel {
         this.setPreferredSize(new Dimension(251, 501)); // Set preferred size
         this.setBackground(Color.WHITE);
         this.placedTetrominos = new ArrayList<>(); // Ensure it's initialized here
+        this.gameDisplay = gameDisplay; // Store reference to GameDisplay
+        this.isPlayerOne = isPlayerOne; // Store reference to which player this is
         setFocusable(true);
         requestFocusInWindow(); // Sets focus on window to allow keyboard inputs
         setupKeyBindings(isPlayerOne); // Function to set up key bindings for player 1 or player 2
@@ -217,14 +221,14 @@ public class GameField extends JPanel {
             actionMap.put("rotate", actions.get("rotate"));
 
         } else {
-            // Player 2: WASD keys
+            // Player 2: num keys
             actions.put("moveLeft", new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     moveTetrominoLeft();
                 }
             });
-            inputMap.put(KeyStroke.getKeyStroke("A"), "moveLeft");
+            inputMap.put(KeyStroke.getKeyStroke("NUMPAD4"), "moveLeft");
             actionMap.put("moveLeft", actions.get("moveLeft"));
 
             actions.put("moveRight", new AbstractAction() {
@@ -233,7 +237,7 @@ public class GameField extends JPanel {
                     moveTetrominoRight();
                 }
             });
-            inputMap.put(KeyStroke.getKeyStroke("D"), "moveRight");
+            inputMap.put(KeyStroke.getKeyStroke("NUMPAD6"), "moveRight");
             actionMap.put("moveRight", actions.get("moveRight"));
 
             actions.put("moveDown", new AbstractAction() {
@@ -242,7 +246,7 @@ public class GameField extends JPanel {
                     moveTetrominoDown();
                 }
             });
-            inputMap.put(KeyStroke.getKeyStroke("S"), "moveDown");
+            inputMap.put(KeyStroke.getKeyStroke("NUMPAD2"), "moveDown");
             actionMap.put("moveDown", actions.get("moveDown"));
 
             actions.put("rotate", new AbstractAction() {
@@ -251,8 +255,37 @@ public class GameField extends JPanel {
                     rotateTetromino();
                 }
             });
-            inputMap.put(KeyStroke.getKeyStroke("W"), "rotate");
+            inputMap.put(KeyStroke.getKeyStroke("NUMPAD8"), "rotate");
             actionMap.put("rotate", actions.get("rotate"));
+            //pause game
+            inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
+            actionMap.put("pause", actions.get("pause"));
+            actions.put("pause", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    togglePause();
+                }
+            });
+
+            //toggle music on/off
+            inputMap.put(KeyStroke.getKeyStroke("M"), "toggleMusic");
+            actionMap.put("toggleMusic", actions.get("toggleMusic"));
+            actions.put("toggleMusic", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    toggleMusic();
+                }
+            });
+
+            //toggle sound effects on/off
+            inputMap.put(KeyStroke.getKeyStroke("S"), "toggleSound");
+            actionMap.put("toggleSound", actions.get("toggleSound"));
+            actions.put("toggleSound", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    toggleSound();
+                }
+            });
         }
     }
 
@@ -321,13 +354,15 @@ public class GameField extends JPanel {
        }
 
     // Change status to paused
-    private void togglePause() {
+    public void togglePause() {
         if (GAME_STATUS == GAME_STARTED) {
             GAME_STATUS = GAME_PAUSED;
             timer.stop(); // Stop the timer when the game is paused
+            System.out.println("Game Paused. Press 'P' to resume.");
         } else if (GAME_STATUS == GAME_PAUSED) {
             GAME_STATUS = GAME_STARTED;
             timer.start(); // Restart the timer when the game resumes
+            System.out.println("Game Resumed.");
         }
         repaint();
     }
@@ -456,15 +491,26 @@ public class GameField extends JPanel {
 
     //function that runs when game finishes
     private void gameOver() {
+        // Stop the game only for this player
         GAME_STATUS = GAME_FINISHED;
-        timer.stop();  // Stop the game loop
-        System.out.println("Current Game Status: "+GAME_STATUS);
+        timer.stop();  // Stop the game loop only for this player
+        System.out.println("Current Game Status: " + GAME_STATUS);
+
         soundManager.playSoundEffect("Sounds/game_over_sound.wav");
-        JOptionPane.showMessageDialog(this, "Game Over! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
+        // Show a message specific to the player
+        JOptionPane.showMessageDialog(this, "Player has lost! The grid is full.", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
+        // Handle score entry if applicable
         userScoreEntry();
-        musicPlayer.stop(); // Stop the music
+        musicPlayer.stop(); // Stop the music for this player
         stopMusic();
-        clearGrid();   // Clear the entire grid
+        clearGrid(); // Clear the grid for this player
+        if (isPlayerOne) {
+            gameDisplay.getGameField2().requestFocusInWindow();
+        } else {
+            gameDisplay.getGameField1().requestFocusInWindow();
+        }
     }
 
     //checks if users score is within the top 10 in the Scores File

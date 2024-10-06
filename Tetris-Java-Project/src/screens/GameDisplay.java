@@ -25,8 +25,23 @@ public class GameDisplay extends JPanel {
         gamePanel = new JPanel();
 
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> app.showScreen("Home"));
+        backButton.addActionListener(e -> {
+            gameField1.togglePause();
+            gameField2.togglePause();
+            int response = JOptionPane.showConfirmDialog(app.getFrame(),
+                    "Are you sure you want to go back?",
+                    "Leave Game?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
 
+            if (response == JOptionPane.YES_OPTION) {
+                app.showScreen("Home"); // If user selects yes, they will be taken back to the home screen
+            } else {
+                // Resume the focus on the game panel so it can capture the 'P' key
+                gameField1.requestFocusInWindow(); // Ensures Player 1 can capture key events
+                gameField2.requestFocusInWindow(); // Ensures Player 2 can capture key events
+            }
+        });
         buttonPanel.add(backButton);
         add(titleLabel, BorderLayout.PAGE_START);
         add(gamePanel, BorderLayout.CENTER);
@@ -60,4 +75,13 @@ public class GameDisplay extends JPanel {
     public void onShow() {
         resetGame();
     }
+
+    public GameField getGameField1() {
+        return gameField1;
+    }
+
+    public GameField getGameField2() {
+        return gameField2;
+    }
+
 }
