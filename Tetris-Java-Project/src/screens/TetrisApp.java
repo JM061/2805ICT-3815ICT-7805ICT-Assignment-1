@@ -52,7 +52,6 @@ public class TetrisApp {
             applicationFrame.setVisible(true);
         });
     }
-
     public void showScreen(String screenName) {
        cardLayout.show(mainPanel, screenName);
        if (screenName.equals("HighScores")) {
@@ -62,7 +61,6 @@ public class TetrisApp {
            gameDisplay.onShow();
        }
     }
-
     public static void main(String[] args) {
         SplashScreen splash = new SplashScreen(2000);
         splash.showSplash();
@@ -71,9 +69,4 @@ public class TetrisApp {
     public JFrame getFrame() {
         return applicationFrame;
     }
-
-
-
-
-
 }

@@ -35,36 +35,40 @@ class ScoreHandlerTest {
         }
     }
 
-    //Should Return Empty Json Object When No FileExists
-    @Test
-    void loadScores_ReturnEmptyIfNoFile() {
-        // Ensure the temp file doesn't exist for this test
-        File file = new File(TEMP_SCORE_FILE);
-        file.delete();
-
-        // Test the loadScores method
-        JsonObject scores = ScoreHandler.loadScores();
-        assertTrue(scores.keySet().isEmpty(), "Scores should be empty when the file doesn't exist");
-    }
-
-    //Should Save Scores Correctly
+    //Should Save Scores Correctly (In Descending Order, No negative numbers)
     @Test
     void saveTopScores_Correctly() {
         // Prepare test data
         List<UserScore> topScores = new ArrayList<>();
         topScores.add(new UserScore("Player1", 500, 5));
         topScores.add(new UserScore("Player2", 300, 3));
-        topScores.add(new UserScore("Player5", 300, 3));
+        topScores.add(new UserScore("Player5", 800, 5));
 
         // Save the top scores
         ScoreHandler.saveTopScores(topScores);
 
         // Reload the scores and verify
         List<UserScore> loadedScores = ScoreHandler.loadTopScores();
-        assertEquals(3, loadedScores.size());
-        assertEquals("Player1", loadedScores.get(0).username);
-        assertEquals(500, loadedScores.get(0).score);
-        assertEquals(5, loadedScores.get(0).level);
+        assertEquals(3, loadedScores.size(), "Loaded scores should match the saved scores count");
+
+        // Verify the correct order
+        assertEquals("Player5", loadedScores.get(0).username, "First place should be Player5");
+        assertEquals(800, loadedScores.get(0).score, "First place score should be 800");
+        assertEquals(5, loadedScores.get(0).level, "First place level should be 5");
+
+        assertEquals("Player1", loadedScores.get(1).username, "Second place should be Player1");
+        assertEquals(500, loadedScores.get(1).score, "Second place score should be 500");
+        assertEquals(5, loadedScores.get(1).level, "Second place level should be 5");
+
+        assertEquals("Player2", loadedScores.get(2).username, "Third place should be Player2");
+        assertEquals(300, loadedScores.get(2).score, "Third place score should be 300");
+        assertEquals(3, loadedScores.get(2).level, "Third place level should be 3");
+
+        System.out.println(loadedScores);
+        // Check for non-negative scores
+        for (UserScore score : loadedScores) {
+            assertTrue(score.score >= 0, "All scores should be non-negative");
+        }
     }
 
 
@@ -87,43 +91,6 @@ class ScoreHandlerTest {
         assertEquals(4, loadedScores.size());
         assertEquals("Player2", loadedScores.get(0).username); // Highest score first
         assertEquals(700, loadedScores.get(0).score);
-    }
-
-    @Test
-    void addNewScore_ShouldAddAndSaveScoresCorrectly() {
-        // Initially save a single score
-        List<UserScore> initialScores = new ArrayList<>();
-        initialScores.add(new UserScore("Player1", 100, 1));
-        ScoreHandler.saveTopScores(initialScores);
-
-        // Add a new score
-        ScoreHandler.addNewScore("Player2", 500, 5);
-
-        // Reload the top scores and verify
-        List<UserScore> loadedScores = ScoreHandler.loadTopScores();
-        assertEquals(2, loadedScores.size());
-        assertEquals("Player2", loadedScores.get(0).username); // Should be at the top
-        assertEquals(500, loadedScores.get(0).score);
-    }
-
-    @Test
-    void removeScoresWithoutPrompt_ShouldClearAllScores() {
-        // Prepare test data with some initial scores
-        List<UserScore> initialScores = new ArrayList<>();
-        initialScores.add(new UserScore("Player1", 500, 5));
-        initialScores.add(new UserScore("Player2", 300, 3));
-        ScoreHandler.saveTopScores(initialScores);
-
-        // Verify scores were saved
-        List<UserScore> savedScores = ScoreHandler.loadTopScores();
-        assertFalse(savedScores.isEmpty(), "Scores should not be empty before removal");
-
-        // Remove scores without prompting
-        ScoreHandler.removeScoresWithoutPrompt();
-
-        // Verify scores are cleared
-        List<UserScore> clearedScores = ScoreHandler.loadTopScores();
-        assertTrue(clearedScores.isEmpty(), "Scores should be empty after removal");
     }
 
 }

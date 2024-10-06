@@ -89,6 +89,11 @@ public class ConfigHandler {
     }
 
     public static void setFieldHeight(int newHeight) {
+        // Validate the new height
+        if (newHeight < 10 || newHeight > 30) {
+            throw new IllegalArgumentException("fieldHeight must be between 10 and 30");
+        }
+
         try (FileReader reader = new FileReader(CONFIG_FILE)) {
             // Parse the existing configuration
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
@@ -105,13 +110,16 @@ public class ConfigHandler {
     }
 
     public static void setFieldWidth(int newWidth) {
+        // Validate the new width
+        if (newWidth < 5 || newWidth > 20) {
+            throw new IllegalArgumentException("fieldWidth must be between 5 and 20");
+        }
+
         try (FileReader reader = new FileReader(CONFIG_FILE)) {
             // Parse the existing configuration
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
-
             // Modify the fieldWidth value
             jsonObject.addProperty("fieldWidth", newWidth);
-
             // Write the updated JSON back to the file
             try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
                 writer.write(jsonObject.toString());

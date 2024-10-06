@@ -98,8 +98,6 @@ public class ConfigScreen extends JPanel {
         AIPlayCheckbox.addActionListener(e->checkAIPlaySelected());
 
 
-
-
         //add configOptions to display
         ConfigOptions.add(OptionsBox);
         add(ConfigOptions, BorderLayout.CENTER);
@@ -109,13 +107,6 @@ public class ConfigScreen extends JPanel {
 
     }
 
-    // private static class SingletonHolder{
-    //    private static final ConfigScreen INSTANCE = new ConfigScreen(this, this.gameSettings);
-  //  }
-
-   // public static ConfigScreen getInstance(TetrisApp tetrisApp, GameSettings gameSettings) {
-   //     return SingletonHolder.INSTANCE;
-   // }
 
 
 

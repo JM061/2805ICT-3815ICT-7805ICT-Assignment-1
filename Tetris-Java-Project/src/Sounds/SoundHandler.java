@@ -53,6 +53,9 @@ public class SoundHandler {
             }
         }
     }
+    public Map<String, Clip> getSoundEffects() {
+        return soundEffects;
+    }
 
     public void playSoundEffect(final String soundName) {
         if (!isMuted) {
@@ -81,5 +84,9 @@ public class SoundHandler {
         } else {
             System.out.println("Sound unmuted.");
         }
+    }
+
+    public boolean isMuted() {
+        return isMuted;
     }
 }
