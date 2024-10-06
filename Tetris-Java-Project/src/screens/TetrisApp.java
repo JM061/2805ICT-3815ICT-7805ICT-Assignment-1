@@ -2,7 +2,9 @@ package screens;
 
 import javax.swing.*;
 import Game.*;
+
 import java.awt.*;
+
 public class TetrisApp {
     public JFrame applicationFrame;
     private JPanel mainPanel;
@@ -54,4 +56,5 @@ public class TetrisApp {
     public JFrame getFrame() {
         return applicationFrame;
     }
+
 }
