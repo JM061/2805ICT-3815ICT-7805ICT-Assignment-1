@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.awt.event.KeyEvent;
 
 import DataHandling.ConfigHandler;
 import DataHandling.ScoreHandler;
@@ -43,10 +44,10 @@ public class GameField extends JPanel {
 
     private int score = 0; //sets default score of 0
     private int rowsCleared = 0; // Total rows cleared in the game
-    private int level = 1;
+    private int level;
 
 
-    public GameField(int rows, int cols, GameDisplay gameDisplay) {
+    public GameField(int rows, int cols, GameDisplay gameDisplay, boolean isPlayerOne) {
         this.gameDisplay = gameDisplay;
         this.rows = rows;
         this.cols = cols;
@@ -54,18 +55,22 @@ public class GameField extends JPanel {
         this.setPreferredSize(new Dimension(251, 501)); // Set preferred size
         this.setBackground(Color.WHITE);
         this.placedTetrominos = new ArrayList<>(); // Ensure it's initialized here
+        this.actions = new HashMap<>();
         setFocusable(true);
         requestFocusInWindow();//sets focus on window to allow keyboard inputs
-        setupKeyBindings();//function to setup keybindings
+        setupKeyBindings(isPlayerOne);//function to setup keybindings
+
+        this.level = getInitialLevel();//sets inital level
 
         // Generates the first tetromino on page load
         TetrominoShapeDefiner randomShape = TetrominoShapeDefiner.getRandomShape();
         currentTetromino = new Tetromino(randomShape, cols / 2, 0);
 
         //initialise music player (Singleton Instance)
-        musicPlayer = bgMusicPlayer.getInstance("/Sounds/backgroundMusic.mp3"); // Get the singleton instance
-        startMusic();
-
+        if(isPlayerOne) {
+            musicPlayer = bgMusicPlayer.getInstance("/Sounds/backgroundMusic.mp3"); // Get the singleton instance
+            startMusic();
+        }
         String[] soundFiles = {
                 "Sounds/clear_row_sound.wav",
                 "Sounds/game_over_sound.wav",
@@ -138,40 +143,92 @@ public class GameField extends JPanel {
 
 
     // Key binding setup
-    private void setupKeyBindings() {
+    private void setupKeyBindings(boolean isPlayerOne) {
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
 
-        // Define actions for key events
-        actions = new HashMap<>();
+        if (isPlayerOne) {
+            // Player 1: Arrow keys
+            actions.put("moveLeft", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoLeft();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
+            actionMap.put("moveLeft", actions.get("moveLeft"));
+
+            actions.put("moveRight", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoRight();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+            actionMap.put("moveRight", actions.get("moveRight"));
+
+            actions.put("moveDown", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoDown();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
+            actionMap.put("moveDown", actions.get("moveDown"));
+
+            actions.put("rotate", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    rotateTetromino();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke("UP"), "rotate");
+            actionMap.put("rotate", actions.get("rotate"));
+
+        } else {
+            // Player 2: WASD keys
+            actions.put("moveLeft", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoLeft();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, 0), "moveLeft");
+            actionMap.put("moveLeft", actions.get("moveLeft"));
+
+            actions.put("moveRight", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoRight();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SLASH, 0), "moveRight");
+            actionMap.put("moveRight", actions.get("moveRight"));
+
+            actions.put("moveDown", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    moveTetrominoDown();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0), "moveDown");
+            actionMap.put("moveDown", actions.get("moveDown"));
+
+            actions.put("rotate", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    rotateTetromino();
+                }
+            });
+            inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SEMICOLON, 0), "rotate");
+            actionMap.put("rotate", actions.get("rotate"));
+        }
+
+        //universal controls
         actions.put("pause", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 togglePause();
-            }
-        });
-        actions.put("moveLeft", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveTetrominoLeft();
-            }
-        });
-        actions.put("moveRight", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveTetrominoRight();
-            }
-        });
-        actions.put("moveDown", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                moveTetrominoDown();
-            }
-        });
-        actions.put("rotate", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                rotateTetromino();
             }
         });
         actions.put("toggleMusic", new AbstractAction() {
@@ -187,24 +244,14 @@ public class GameField extends JPanel {
             }
         });
 
-        // Bind keys to actions
         inputMap.put(KeyStroke.getKeyStroke("P"), "pause");
-        inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
-        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
-        inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
-        inputMap.put(KeyStroke.getKeyStroke("UP"), "rotate");
         inputMap.put(KeyStroke.getKeyStroke("M"), "toggleMusic");
         inputMap.put(KeyStroke.getKeyStroke("S"), "toggleSound");
 
-
-
         actionMap.put("pause", actions.get("pause"));
-        actionMap.put("moveLeft", actions.get("moveLeft"));
-        actionMap.put("moveRight", actions.get("moveRight"));
-        actionMap.put("moveDown", actions.get("moveDown"));
-        actionMap.put("rotate", actions.get("rotate"));
         actionMap.put("toggleMusic", actions.get("toggleMusic"));
         actionMap.put("toggleSound", actions.get("toggleSound"));
+
     }
 
     // Function to rotate the current tetromino
@@ -233,7 +280,6 @@ public class GameField extends JPanel {
         }
     }
 
-    //moves tetromino right
     public void moveTetrominoRight() {
         if (GAME_STATUS == GAME_STARTED) {
             if (currentTetromino != null && canMoveTo(currentTetromino, currentTetromino.getX() + 1, currentTetromino.getY())) {
@@ -246,6 +292,7 @@ public class GameField extends JPanel {
     //moves tetromino down
     public void moveTetrominoDown() {
         if (GAME_STATUS == GAME_STARTED) {
+
             if (canMoveDown(currentTetromino)) {
                 currentTetromino.moveDown();
             } else {
@@ -255,6 +302,7 @@ public class GameField extends JPanel {
             repaint();
         }
     }
+
 
     //checks if the tetromino can be moved
     private boolean canMoveTo(Tetromino tetromino, int newX, int newY) {
@@ -368,6 +416,12 @@ public class GameField extends JPanel {
         updateDropDelay(); // Update the drop delay when leveling up
 
     }
+
+    private int getInitialLevel(){
+        return ConfigHandler.getInitLevel();
+
+    }
+
 
 
     private int getDropDelay() {

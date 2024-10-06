@@ -131,6 +131,28 @@ public class ConfigHandler {
         }
     }
 
+    public static void setGameLevel(int newLevel){
+        // Validate the new width
+        if (newLevel < 1 || newLevel > 10) {
+            throw new IllegalArgumentException("Game must be between 1 and 10");
+        }
+        try (FileReader reader = new FileReader(CONFIG_FILE)) {
+            // Parse the existing configuration
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            // Modify the fieldWidth value
+            jsonObject.addProperty("gameLevel", newLevel);
+            // Write the updated JSON back to the file
+            try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
+                writer.write(jsonObject.toString());
+                writer.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle any exceptions (FileReader or FileWriter)
+        }
+    }
+
+
+
 
     public static void setMusic(boolean musicStatus){
         try (FileReader reader = new FileReader(CONFIG_FILE)){
@@ -232,6 +254,26 @@ public static void setExtendedMode(boolean extendedStatus){
         }
     }
     public static boolean getSoundEffectsStatus(){
+        try(FileReader reader = new FileReader(CONFIG_FILE)){
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            return jsonObject.get("soundEffectsEnabled").getAsBoolean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static int getInitLevel(){
+        try(FileReader reader = new FileReader(CONFIG_FILE)){
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            return jsonObject.get("gameLevel").getAsInt();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+
+    public static boolean getAiPlayStatus(){
         try(FileReader reader = new FileReader(CONFIG_FILE)){
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
             return jsonObject.get("soundEffectsEnabled").getAsBoolean();

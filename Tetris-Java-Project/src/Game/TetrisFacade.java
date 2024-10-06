@@ -4,6 +4,8 @@ import screens.GameDisplay;
 
 public class TetrisFacade {
     private GameField gameField;
+    private GameField gameField2;
+
     private GameInfoDisplay gameInfoDisplay;
     private GameObserver gameObserver;
     private GameSettings gameSettings;
@@ -44,7 +46,11 @@ public class TetrisFacade {
     // Start a new game
     public void startGame(int rows, int cols, GameDisplay gameDisplay) {
         // Initialize GameField with rows, columns, and GameDisplay
-        gameField = new GameField(rows, cols, gameDisplay);
+        gameField = new GameField(rows, cols, gameDisplay, true);
+        gameField2 = new GameField(rows, cols, gameDisplay, false);
+        gameField.gameStart(); // Sets GAME_STATUS to GAME_STARTED and starts the timer inside GameField
+        gameField.spawnTetromino();
+
 
         // Set up the game start logic
         gameField.gameStart(); // Sets GAME_STATUS to GAME_STARTED and starts the timer inside GameField
@@ -61,6 +67,7 @@ public class TetrisFacade {
     }
 
     // Delegate movement to GameField
+    //Player 1 Movement
     public void moveTetrominoLeft() {
         gameField.moveTetrominoLeft();
     }
@@ -72,6 +79,7 @@ public class TetrisFacade {
     public void rotateTetromino() {
         gameField.rotateTetromino();
     }
+
 
     // Toggle Pause/Resume Game using existing togglePause method in GameField
     public void togglePauseGame() {

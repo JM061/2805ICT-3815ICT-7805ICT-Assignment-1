@@ -57,19 +57,23 @@ public class ConfigScreen extends JPanel {
 
         // Create labels with slider inputs
         int fieldWidth = gameSettings.getFieldWidth();
-        ConfigSlider widthSlider = createLabelWithSlider("Field Width: ", 5, 20, 10);
+        ConfigSlider widthSlider = createLabelWithSlider("Field Width: ", 5, 20, ConfigHandler.getFieldWidth());
         widthSlider.getSlider().addChangeListener(e -> {
             int newWidth = widthSlider.getSlider().getValue();
             ConfigHandler.setFieldWidth(newWidth); // Save the new width to the config file
         });
 
         int fieldHeight = gameSettings.getFieldHeight();
-        ConfigSlider heightSlider = createLabelWithSlider("Field Height: ", 10, 30, 20);
+        ConfigSlider heightSlider = createLabelWithSlider("Field Height: ", 10, 30, ConfigHandler.getFieldHeight());
         heightSlider.getSlider().addChangeListener(e -> {
             int newHeight = heightSlider.getSlider().getValue();
             ConfigHandler.setFieldHeight(newHeight); // Save the new height to the config file
         });
-        ConfigSlider gameLevelSlider = createLabelWithSlider("Game Level: ", 0, 20, 5);
+        ConfigSlider gameLevelSlider = createLabelWithSlider("Game Level: ", 1, 10, ConfigHandler.getInitLevel());
+        gameLevelSlider.getSlider().addChangeListener(e->{
+            int newLevel = gameLevelSlider.getSlider().getValue();
+            ConfigHandler.setGameLevel(newLevel);
+        });
 
         // Add sliders to OptionsBox with vertical gaps
         OptionsBox.add(Box.createRigidArea(new Dimension(0, 15))); // Adds 15px vertical gap
@@ -86,6 +90,13 @@ public class ConfigScreen extends JPanel {
         AIPlayCheckbox = new JCheckBox();
         extendedModeCheckbox = new JCheckBox();
         player2Checkbox = new JCheckBox();
+
+
+        musicCheckbox.setSelected(ConfigHandler.getMusicStatus());
+        soundEffectsCheckbox.setSelected(ConfigHandler.getSoundEffectsStatus());
+        //AIPlayCheckbox.setSelected(ConfigHandler.get);
+        extendedModeCheckbox.setSelected(ConfigHandler.getExtendedMode());
+        player2Checkbox.setSelected(ConfigHandler.getPlayer2Status());
 
         //add checkboxes with labels
         OptionsBox.add(createLabelWithCheckbox("Music (ON | OFF):", musicCheckbox));
@@ -141,7 +152,6 @@ public class ConfigScreen extends JPanel {
         playerButton.setEnabled(false);
         aiButton.setEnabled(false);
         externalButton.setEnabled(false);
-
 
         //options for player 2
         JLabel player2Label = ComponentFactory.createLabel("Player 2: ");
@@ -251,10 +261,6 @@ public class ConfigScreen extends JPanel {
         }
 
     }
-
-
-
-
 
 }
 

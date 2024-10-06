@@ -39,11 +39,9 @@ public class GameSettings {
     public boolean isMusicEnabled() {
         return musicEnabled;
     }
-
     public void setMusicEnabled(boolean musicEnabled) {
         this.musicEnabled = musicEnabled;
     }
-
     public boolean isSoundEffectsEnabled() {
         return soundEffectsEnabled;
     }

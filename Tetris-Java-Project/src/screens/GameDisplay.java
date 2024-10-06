@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import Game.GameSettings;
 import Game.GameField.*;
-
+import DataHandling.ConfigHandler;
 
 import Game.*;
 
@@ -19,6 +19,8 @@ public class GameDisplay extends JPanel {
     private GameInfoDisplay gameInfoDisplay;
     //private GameInfoDisplay gameInfoDisplay2;
 
+    private GameField gameField2;
+    private GameInfoDisplay gameInfoDisplay2;
 
 
     public GameDisplay(TetrisApp app, GameSettings settings) {
@@ -66,27 +68,28 @@ public class GameDisplay extends JPanel {
 
         int fieldWidth  = gameSettings.getFieldWidth();
         int fieldHeight = gameSettings.getFieldHeight();
+        int initalLevel = ConfigHandler.getInitLevel();
         gamePanel.removeAll();
 
-        gameField = new GameField(fieldHeight, fieldWidth, this);
-        gameInfoDisplay = new GameInfoDisplay(1, 0, 1, 0);
-
+        gameField = new GameField(fieldHeight, fieldWidth, this, true);
+        gameInfoDisplay = new GameInfoDisplay(initalLevel, 0, initalLevel, 0);
         gameField.addObserver(gameInfoDisplay);
-        //need to add
-        //adds second game field need to add controls for second field
-        //GameField gameField2 = new GameField(fieldHeight, fieldWidth);
-        //GameInfoDisplay gameInfoDisplay2= new GameInfoDisplay();
-        //gameField2.clearGrid();
-        //gameField2.gameStart();
 
+
+        if (ConfigHandler.getPlayer2Status()) {
+            // Player 2
+            gameField2 = new GameField(fieldHeight, fieldWidth, this, false);
+            gameInfoDisplay2 = new GameInfoDisplay(1, 0, 1, 0);
+            gameField2.addObserver(gameInfoDisplay2);
+            gamePanel.add(gameField2);
+            gamePanel.add(gameInfoDisplay2);
+
+        }
 
         gameField.clearGrid();
         gameField.gameStart();
         gamePanel.add(gameField);
         gamePanel.add(gameInfoDisplay);
-
-        //gamePanel.add(gameField2);
-        //gamePanel.add(gameInfoDisplay2);
 
         gamePanel.revalidate();
         gamePanel.repaint();

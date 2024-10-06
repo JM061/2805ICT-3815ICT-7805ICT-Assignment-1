@@ -20,7 +20,6 @@ public class SoundHandler {
             loadSoundEffects(soundFilesConfig);
         }
     }
-
     // Thread-safe getInstance using double-checked locking
     public static SoundHandler getInstance(String[] soundFiles) {
         SoundHandler result = instance;
@@ -35,7 +34,6 @@ public class SoundHandler {
         }
         return result;
     }
-
 
     private void loadSoundEffects(String[] soundFiles) {
         for (String filePath : soundFiles) {
