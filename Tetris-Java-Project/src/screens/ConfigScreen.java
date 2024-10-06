@@ -1,4 +1,5 @@
 package screens;
+import Components.ComponentFactory;
 import Components.ConfigSlider;
 
 import javax.swing.*;
@@ -9,8 +10,6 @@ import static Components.ConfigSlider.*;
 
 import DataHandling.ConfigHandler;
 import Game.GameSettings;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class ConfigScreen extends JPanel {
 
@@ -18,9 +17,18 @@ public class ConfigScreen extends JPanel {
     private JCheckBox soundEffectsCheckbox;
     private JCheckBox AIPlayCheckbox;
     private JCheckBox extendedModeCheckbox;
+    private JCheckBox player2Checkbox;
+
+    private JRadioButton playerButton;
+    private JRadioButton aiButton;
+    private JRadioButton externalButton;
+
+    private JRadioButton playerButton2;
+    private JRadioButton aiButton2;
+    private JRadioButton externalButton2;
+
 
     public ConfigScreen(TetrisApp app, GameSettings gameSettings) {
-
         setLayout(new BorderLayout());
         JLabel titleLabel = new JLabel("Configuration");
         titleLabel.setFont(new Font("Dialog", Font.PLAIN, 32));
@@ -77,6 +85,7 @@ public class ConfigScreen extends JPanel {
         soundEffectsCheckbox = new JCheckBox();
         AIPlayCheckbox = new JCheckBox();
         extendedModeCheckbox = new JCheckBox();
+        player2Checkbox = new JCheckBox();
 
         //add checkboxes with labels
         OptionsBox.add(createLabelWithCheckbox("Music (ON | OFF):", musicCheckbox));
@@ -86,34 +95,85 @@ public class ConfigScreen extends JPanel {
         OptionsBox.add(createLabelWithCheckbox("AI Play (ON | OFF):", AIPlayCheckbox));
         OptionsBox.add(Box.createRigidArea(new Dimension(0, 15)));
         OptionsBox.add(createLabelWithCheckbox("Extend Mode (ON | OFF):", extendedModeCheckbox));
+        OptionsBox.add(Box.createRigidArea(new Dimension(0, 15)));
+        OptionsBox.add(createLabelWithCheckbox("Player 2 (ON | OFF):", player2Checkbox));
+        player2Checkbox.setEnabled(false); //disables p2 button by default
 
         //add action listener to the event checkbox
-        extendedModeCheckbox.addActionListener(e -> checkExtendedModeSelected());
+        extendedModeCheckbox.addActionListener(e -> {checkExtendedModeSelected();
+            //enables/disables player 2 button
+            player2Checkbox.setEnabled(isExtendedModeEnabled());
+            //enables buttons for player 1
+            playerButton.setEnabled(isExtendedModeEnabled());
+            aiButton.setEnabled(isExtendedModeEnabled());
+            externalButton.setEnabled(isExtendedModeEnabled());
+
+            //enables player 2 buttons
+            playerButton2.setEnabled(isExtendedModeEnabled());
+            aiButton2.setEnabled(isExtendedModeEnabled());
+            externalButton2.setEnabled(isExtendedModeEnabled());
+        });
 
         musicCheckbox.addActionListener(e-> checkMusicSelected());
-        //musicCheckbox.
 
         soundEffectsCheckbox.addActionListener(e->checkSoundEffectsSelected());
 
         AIPlayCheckbox.addActionListener(e->checkAIPlaySelected());
 
+        player2Checkbox.addActionListener(e->checkPlayer2Selected());
 
         //add configOptions to display
         ConfigOptions.add(OptionsBox);
         add(ConfigOptions, BorderLayout.CENTER);
 
+        //options for player 1
+        JLabel player1Label = ComponentFactory.createLabel("Player 1: ");
+         playerButton = new JRadioButton("Player");
+         aiButton = new JRadioButton("AI");
+         externalButton = new JRadioButton("External");
+
+        ButtonGroup p1ButtonGroup = new ButtonGroup();
+        p1ButtonGroup.add(playerButton);
+        p1ButtonGroup.add(aiButton);
+        p1ButtonGroup.add(externalButton);
+
+        //set radio buttons to disabled by default
+        playerButton.setEnabled(false);
+        aiButton.setEnabled(false);
+        externalButton.setEnabled(false);
 
 
+        //options for player 2
+        JLabel player2Label = ComponentFactory.createLabel("Player 2: ");
+         playerButton2 = new JRadioButton("Player");
+         aiButton2 = new JRadioButton("AI");
+         externalButton2 = new JRadioButton("External");
 
+        playerButton2.setEnabled(false);
+        aiButton2.setEnabled(false);
+        externalButton2.setEnabled(false);
+
+        ButtonGroup p2ButtonGroup = new ButtonGroup();
+        p2ButtonGroup.add(playerButton2);
+        p2ButtonGroup.add(aiButton2);
+        p2ButtonGroup.add(externalButton2);
+
+        //adds radio buttons to options box
+        OptionsBox.add(player1Label);
+        OptionsBox.add(playerButton);
+        OptionsBox.add(aiButton);
+        OptionsBox.add(externalButton);
+
+        OptionsBox.add(player2Label);
+        OptionsBox.add(playerButton2);
+        OptionsBox.add(aiButton2);
+        OptionsBox.add(externalButton2);
     }
-
-
-
-
 
     // Method to check if extended mode is selected
     public boolean isExtendedModeEnabled() {
-        return extendedModeCheckbox.isSelected();
+      return extendedModeCheckbox.isSelected();
+
     }
 
     // Check if music is selected
@@ -126,6 +186,10 @@ public class ConfigScreen extends JPanel {
         return soundEffectsCheckbox.isSelected();
     }
 
+    public boolean isPlayer2Selected(){
+        return player2Checkbox.isSelected();
+    }
+
     //check if AI Play is enabled
     public boolean isAIPlayEnabled() {
         return AIPlayCheckbox.isSelected();
@@ -136,6 +200,7 @@ public class ConfigScreen extends JPanel {
         if (isExtendedModeEnabled()) {
             System.out.println("Extended Mode is enabled");
             ConfigHandler.setExtendedMode(isExtendedModeEnabled());
+
             // Perform actions related to Extended Mode
         } else {
             System.out.println("Extended Mode is disabled");
@@ -173,6 +238,23 @@ public class ConfigScreen extends JPanel {
             System.out.println("AI Play is off");
         }
     }
+
+
+    public void checkPlayer2Selected(){
+        if (isPlayer2Selected()) {
+            System.out.println("Sound Effects is on");
+            ConfigHandler.setPlayer2(isPlayer2Selected());
+        } else {
+            System.out.println("Sound Effects is disabled");
+            ConfigHandler.setPlayer2(isPlayer2Selected());
+
+        }
+
+    }
+
+
+
+
 
 }
 

@@ -64,6 +64,7 @@ public class ConfigHandler {
         defaultSettings.addProperty("musicEnabled", true);
         defaultSettings.addProperty("soundEffectsEnabled", true);
         defaultSettings.addProperty("extendedMode", false);
+        defaultSettings.addProperty("player2Status", false);
         return defaultSettings;
     }
 
@@ -165,6 +166,34 @@ public static void setSoundEffects(boolean soundEffectStatus){
         e.printStackTrace();
     }
 }
+
+    public static void setPlayer2(boolean player2Status) {
+        try (FileReader reader = new FileReader(CONFIG_FILE)){
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            jsonObject.addProperty("player2Status", player2Status);
+            try(FileWriter writer = new FileWriter(CONFIG_FILE)){
+                writer.write(jsonObject.toString());
+                writer.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    public static boolean getPlayer2Status(){
+        try (FileReader reader = new FileReader(CONFIG_FILE)){
+            JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+            return jsonObject.get("player2Status").getAsBoolean();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
 public static void setExtendedMode(boolean extendedStatus){
     try (FileReader reader = new FileReader(CONFIG_FILE)){
