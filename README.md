@@ -1,8 +1,12 @@
 # 2805ICT-3815ICT-7805ICT Assignment 1
 Assignment For Software Engineering Course
+
 Task: Create a Tetris Clone using Java
+
 Project was completed Trimester 2 2024
+
 The group task required our team to communicate effectively to ensure understandable, efficient code was written.
+
 The group ran into some difficulties, but overcame them by focusing more time to the parts that were causing issues.
 
 ## Students Included in the Project
