@@ -1,5 +1,9 @@
-# 2805ICT-3815ICT-7805ICT-Assignment-1
-GitHub Repo for Software Engineering Project.
+# 2805ICT-3815ICT-7805ICT Assignment 1
+Assignment For Software Engineering Course
+Task: Create a Tetris Clone using Java
+Project was completed Trimester 2 2024
+The group task required our team to communicate effectively to ensure understandable, efficient code was written.
+The group ran into some difficulties, but overcame them by focusing more time to the parts that were causing issues.
 
 ## Students Included in the Project
 
@@ -13,7 +17,7 @@ GitHub Repo for Software Engineering Project.
 - [x] Make buttons functional (navigate between screens)
 - [x] Add settings to config screen (non functional)
   - [x] Style Config Options
-  - [ ] (MILESTONE 2) Add Functionality to options 
+  - [x] (MILESTONE 2) Add Functionality to options 
 - [ ] Add gameplay functionality
   - [x] Create canvas for game to be displayed on
   - [x] User input
@@ -37,29 +41,29 @@ GitHub Repo for Software Engineering Project.
   - [x] Add user scores to end of file
   - [x] edit the config file when user changes the config
   - [x] Sort high scores when displaying on high score page
-- [ ] Music and Sound Effects
-- [ ] Extended Mode
+- [x] Music and Sound Effects
+- [x] Extended Mode
   - [ ]  AI Play
   - [ ]  Secondary Player
   - [ ]  Use differnet keys to first player
   - [ ]  Connection to TetrisServer Provided
 
 ## Drawings / Diagrams
-- [ X] MVC Architectural Design Patterns
-  - [X ] Description of MVC
-  - [ X] Class Diagram
-  - [X ] Code Screenshot
-  - [ X] Alignment
-- [ ] Allocation Diagrams
-  - [ ] Implementation Style View
-  - [ ] Deployment Style View
-- [ ] Design Patterns
-  - [X ]  Singleton Design Patterns
-  - [X ]  Factory Design Pattern
-  - [X ]  Facade Design Pattern
-- [ ]  Good Programing Practices
+- [X] MVC Architectural Design Patterns
+  - [x] Description of MVC
+  - [x] Class Diagram
+  - [x] Code Screenshot
+  - [x] Alignment
+- [x] Allocation Diagrams
+  - [x] Implementation Style View
+  - [x] Deployment Style View
+- [x] Design Patterns
+  - [x]  Singleton Design Patterns
+  - [x]  Factory Design Pattern
+  - [x]  Facade Design Pattern
+- [x]  Good Programing Practices
   - [x] Sorting
   - [x] Lambda Expressions
-  - [X ] Multiple Threads
+  - [x] Multiple Threads
   - [x] Exception and Argument Validation Handling
-  - [ ] Testing
+  - [x] Testing
